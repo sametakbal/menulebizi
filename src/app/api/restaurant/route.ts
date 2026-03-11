@@ -28,10 +28,11 @@ export async function PATCH(req: Request) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { name, phone } = await req.json();
+    const { name, phone, menuLayout } = await req.json();
     const updates: Record<string, string> = {};
     if (name !== undefined) updates.name = name;
     if (phone !== undefined) updates.phone = phone;
+    if (menuLayout !== undefined) updates.menuLayout = menuLayout;
 
     await adminDb
         .collection("restaurants")

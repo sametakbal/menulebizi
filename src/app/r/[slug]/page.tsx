@@ -1,6 +1,7 @@
 import { adminDb } from "@/lib/firebase-admin";
 import { notFound } from "next/navigation";
 import CategorySection from "@/components/CategorySection";
+import type { MenuLayout } from "@/components/MenuCard";
 
 interface Item {
     id: string;
@@ -89,7 +90,7 @@ export default async function PublicMenuPage({
                             <a
                                 key={cat.id}
                                 href={`#cat-${cat.id}`}
-                                className="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-primary hover:text-white hover:border-primary transition-colors"
+                                className="shrink-0 px-4 py-2 rounded-full text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-primary hover:text-white hover:border-primary transition-colors"
                             >
                                 {cat.name}
                             </a>
@@ -105,6 +106,7 @@ export default async function PublicMenuPage({
                             id={cat.id}
                             name={cat.name}
                             items={cat.items}
+                            layout={(restaurant.menuLayout as MenuLayout) || "classic"}
                         />
                     ))}
 
