@@ -14,9 +14,11 @@ interface CategorySectionProps {
     readonly name: string;
     readonly items: Item[];
     readonly layout?: MenuLayout;
+    readonly showPrices?: boolean;
+    readonly currency?: string;
 }
 
-export default function CategorySection({ id, name, items, layout = "classic" }: CategorySectionProps) {
+export default function CategorySection({ id, name, items, layout = "classic", showPrices = true, currency = "₺" }: CategorySectionProps) {
     const available = items.filter((item) => item.isAvailable);
 
     if (available.length === 0) return null;
@@ -39,6 +41,8 @@ export default function CategorySection({ id, name, items, layout = "classic" }:
                         price={item.price}
                         imageUrl={item.imageUrl}
                         layout={layout}
+                        showPrices={showPrices}
+                        currency={currency}
                     />
                 ))}
             </div>

@@ -43,11 +43,27 @@ const LAYOUT_PREVIEWS: Record<MenuLayout, React.ReactNode> = {
 
 const LAYOUT_VALUES: MenuLayout[] = ["classic", "visual", "compact"];
 
+const ACCENT_COLORS = [
+    { value: "#e9590c", label: "Orange" },
+    { value: "#dc2626", label: "Red" },
+    { value: "#e11d48", label: "Rose" },
+    { value: "#7c3aed", label: "Purple" },
+    { value: "#2563eb", label: "Blue" },
+    { value: "#0d9488", label: "Teal" },
+    { value: "#16a34a", label: "Green" },
+    { value: "#475569", label: "Slate" },
+];
+
+const CURRENCIES = ["₺", "$", "€", "£", "₽", "﷼"];
+
 export default function SettingsPage() {
     const { t } = useLanguage();
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [menuLayout, setMenuLayout] = useState<MenuLayout>("classic");
+    const [accentColor, setAccentColor] = useState("#e9590c");
+    const [showPrices, setShowPrices] = useState(true);
+    const [currency, setCurrency] = useState("₺");
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [status, setStatus] = useState<"" | "saved" | "error">("");
@@ -71,6 +87,9 @@ export default function SettingsPage() {
                 setName(data.name || "");
                 setPhone(data.phone || "");
                 setMenuLayout(data.menuLayout || "classic");
+                setAccentColor(data.accentColor || "#e9590c");
+                setShowPrices(data.showPrices !== false);
+                setCurrency(data.currency || "₺");
             })
             .finally(() => setLoading(false));
     }, []);
@@ -82,7 +101,7 @@ export default function SettingsPage() {
             const res = await fetch("/api/restaurant", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, phone, menuLayout }),
+                body: JSON.stringify({ name, phone, menuLayout, accentColor, showPrices, currency }),
             });
             setStatus(res.ok ? "saved" : "error");
         } finally {
@@ -173,6 +192,76 @@ export default function SettingsPage() {
                             )}
                         </button>
                     ))}
+                </div>
+            </div>
+
+            {/* Accent Color */}
+            <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm">
+                <div className="flex items-center gap-2 mb-2">
+                    <span className="material-symbols-outlined text-primary">palette</span>
+                    <h2 className="text-lg font-bold text-slate-900">{t("settings.accentColorTitle")}</h2>
+                </div>
+                <p className="text-sm text-slate-500 mb-4">{t("settings.accentColorDesc")}</p>
+                <div className="flex gap-3 flex-wrap">
+                    {ACCENT_COLORS.map(({ value, label }) => (
+                        <button
+                            key={value}
+                            type="button"
+                            title={label}
+                            onClick={() => setAccentColor(value)}
+                            className={`w-9 h-9 rounded-full transition-all ${
+                                accentColor === value
+                                    ? "ring-2 ring-offset-2 ring-slate-400 scale-110"
+                                    : "hover:scale-105"
+                            }`}
+                            style={{ backgroundColor: value }}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {/* Show Prices & Currency */}
+            <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm space-y-5">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <span className="material-symbols-outlined text-primary">payments</span>
+                        <div>
+                            <p className="font-bold text-slate-900">{t("settings.showPricesTitle")}</p>
+                            <p className="text-sm text-slate-500">{t("settings.showPricesDesc")}</p>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => setShowPrices((p) => !p)}
+                        className={`relative w-12 h-6 rounded-full transition-colors ${showPrices ? "bg-primary" : "bg-slate-200"}`}
+                    >
+                        <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${showPrices ? "translate-x-6" : ""}`} />
+                    </button>
+                </div>
+                <div className="border-t border-slate-100 pt-5">
+                    <div className="flex items-center gap-2 mb-3">
+                        <span className="material-symbols-outlined text-primary">currency_exchange</span>
+                        <div>
+                            <p className="font-bold text-slate-900">{t("settings.currencyTitle")}</p>
+                            <p className="text-sm text-slate-500">{t("settings.currencyDesc")}</p>
+                        </div>
+                    </div>
+                    <div className="flex gap-2 flex-wrap">
+                        {CURRENCIES.map((c) => (
+                            <button
+                                key={c}
+                                type="button"
+                                onClick={() => setCurrency(c)}
+                                className={`w-12 h-10 rounded-xl text-sm font-bold border-2 transition-all ${
+                                    currency === c
+                                        ? "border-primary bg-primary/5 text-primary"
+                                        : "border-slate-200 text-slate-600 hover:border-slate-300"
+                                }`}
+                            >
+                                {c}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 

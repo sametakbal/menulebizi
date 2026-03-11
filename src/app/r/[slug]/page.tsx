@@ -69,8 +69,12 @@ export default async function PublicMenuPage({
         }))
         .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
+    const accentColor = (restaurant.accentColor as string) || "#e9590c";
+    const showPrices = restaurant.showPrices !== false;
+    const currency = (restaurant.currency as string) || "₺";
+
     return (
-        <div className="min-h-screen bg-background-light">
+        <div className="min-h-screen bg-background-light" style={{ "--color-primary": accentColor } as React.CSSProperties}>
             <div className="max-w-lg mx-auto px-4 py-8">
                 {/* Header */}
                 <div className="text-center mb-8">
@@ -110,6 +114,8 @@ export default async function PublicMenuPage({
                             name={cat.name}
                             items={cat.items}
                             layout={(restaurant.menuLayout as MenuLayout) || "classic"}
+                            showPrices={showPrices}
+                            currency={currency}
                         />
                     ))}
 

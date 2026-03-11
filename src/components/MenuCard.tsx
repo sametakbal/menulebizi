@@ -3,14 +3,18 @@ import Image from "next/image";
 export type MenuLayout = "classic" | "visual" | "compact";
 
 interface MenuItemProps {
-    name: string;
-    description?: string;
-    price: number;
-    imageUrl?: string;
-    layout?: MenuLayout;
+    readonly name: string;
+    readonly description?: string;
+    readonly price: number;
+    readonly imageUrl?: string;
+    readonly layout?: MenuLayout;
+    readonly showPrices?: boolean;
+    readonly currency?: string;
 }
 
-export default function MenuCard({ name, description, price, imageUrl, layout = "classic" }: MenuItemProps) {
+export default function MenuCard({ name, description, price, imageUrl, layout = "classic", showPrices = true, currency = "₺" }: MenuItemProps) {
+    const priceLabel = `${price.toFixed(2)} ${currency}`;
+
     if (layout === "compact") {
         return (
             <div className="flex items-center justify-between gap-3 py-3 border-b border-slate-100 last:border-0">
@@ -20,9 +24,11 @@ export default function MenuCard({ name, description, price, imageUrl, layout = 
                         <p className="text-xs text-slate-400 mt-0.5 truncate">{description}</p>
                     )}
                 </div>
-                <span className="font-bold text-primary whitespace-nowrap text-sm shrink-0">
-                    {price.toFixed(2)} ₺
-                </span>
+                {showPrices && (
+                    <span className="font-bold text-primary whitespace-nowrap text-sm shrink-0">
+                        {priceLabel}
+                    </span>
+                )}
             </div>
         );
     }
@@ -44,7 +50,9 @@ export default function MenuCard({ name, description, price, imageUrl, layout = 
                     {description && (
                         <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">{description}</p>
                     )}
-                    <p className="font-bold text-primary text-sm mt-2">{price.toFixed(2)} ₺</p>
+                    {showPrices && (
+                        <p className="font-bold text-primary text-sm mt-2">{priceLabel}</p>
+                    )}
                 </div>
             </div>
         );
@@ -68,9 +76,11 @@ export default function MenuCard({ name, description, price, imageUrl, layout = 
                     <p className="text-sm text-slate-500 mt-0.5">{description}</p>
                 )}
             </div>
-            <span className="font-bold text-primary whitespace-nowrap text-lg shrink-0">
-                {price.toFixed(2)} ₺
-            </span>
+            {showPrices && (
+                <span className="font-bold text-primary whitespace-nowrap text-lg shrink-0">
+                    {priceLabel}
+                </span>
+            )}
         </div>
     );
 }
