@@ -10,6 +10,7 @@ import type { TranslationKey } from "@/lib/i18n";
 const navItems: { href: string; labelKey: TranslationKey; icon: string }[] = [
     { href: "/dashboard", labelKey: "nav.overview", icon: "dashboard" },
     { href: "/dashboard/menu", labelKey: "nav.menuManagement", icon: "restaurant_menu" },
+    { href: "/dashboard/orders", labelKey: "nav.orders", icon: "receipt_long" },
     { href: "/dashboard/settings", labelKey: "nav.settings", icon: "settings" },
 ];
 

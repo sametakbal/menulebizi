@@ -22,18 +22,18 @@ export const localeFlags: Record<Locale, string> = {
 export type Translations = typeof tr;
 
 // Use a structural shape (not the exact literal type) so other locales' string values are accepted
-type TranslationsShape = {
-    [K in keyof Translations]: {
-        [P in keyof Translations[K]]: string;
-    };
+type StringLeaf<T> = {
+    [K in keyof T]: T[K] extends object ? StringLeaf<T[K]> : string;
 };
+
+type TranslationsShape = StringLeaf<Translations>;
 
 const translations: Record<Locale, TranslationsShape> = { tr, en, es };
 
 type NestedKeyOf<T extends object> = {
     [K in keyof T & string]: T[K] extends object
-        ? `${K}.${NestedKeyOf<T[K]>}`
-        : K;
+    ? `${K}.${NestedKeyOf<T[K]>}`
+    : K;
 }[keyof T & string];
 
 export type TranslationKey = NestedKeyOf<Translations>;

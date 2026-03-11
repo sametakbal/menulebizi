@@ -1,6 +1,7 @@
 import { adminDb } from "@/lib/firebase-admin";
 import { notFound } from "next/navigation";
 import CategorySection from "@/components/CategorySection";
+import TableMenu from "@/components/TableMenu";
 import type { MenuLayout } from "@/components/MenuCard";
 import { getLocale } from "@/lib/i18n/getLocale";
 import { getT } from "@/lib/i18n";
@@ -24,11 +25,14 @@ interface Category {
 
 export default async function PublicMenuPage({
     params,
+    searchParams,
 }: {
-    params: Promise<{ slug: string }>;
+    readonly params: Promise<{ slug: string }>;
+    readonly searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-    const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+    const [{ slug }, query, locale] = await Promise.all([params, searchParams, getLocale()]);
     const t = getT(locale);
+    const tableNumber = typeof query.table === "string" ? query.table : null;
 
     // Find restaurant by slug
     const restaurantSnap = await adminDb
@@ -72,6 +76,43 @@ export default async function PublicMenuPage({
     const accentColor = (restaurant.accentColor as string) || "#e9590c";
     const showPrices = restaurant.showPrices !== false;
     const currency = (restaurant.currency as string) || "₺";
+
+    // Table mode: render interactive menu with cart + waiter call
+    if (tableNumber) {
+        const tableT = {
+            table: t("tableMenu.table"),
+            notReady: t("publicMenu.notReady"),
+            poweredBy: t("publicMenu.poweredBy"),
+            add: t("tableMenu.add"),
+            viewCart: t("tableMenu.viewCart"),
+            yourOrder: t("tableMenu.yourOrder"),
+            emptyCart: t("tableMenu.emptyCart"),
+            orderNote: t("tableMenu.orderNote"),
+            orderNotePlaceholder: t("tableMenu.orderNotePlaceholder"),
+            total: t("tableMenu.total"),
+            sendOrder: t("tableMenu.sendOrder"),
+            sendingOrder: t("tableMenu.sendingOrder"),
+            orderSent: t("tableMenu.orderSent"),
+            callWaiter: t("tableMenu.callWaiter"),
+            calling: t("tableMenu.calling"),
+            waiterCalled: t("tableMenu.waiterCalled"),
+        };
+
+        return (
+            <TableMenu
+                restaurantId={restaurantDoc.id}
+                restaurantName={restaurant.name}
+                restaurantPhone={restaurant.phone}
+                categories={categories}
+                layout={(restaurant.menuLayout as MenuLayout) || "classic"}
+                accentColor={accentColor}
+                showPrices={showPrices}
+                currency={currency}
+                tableNumber={tableNumber}
+                t={tableT}
+            />
+        );
+    }
 
     return (
         <div className="min-h-screen bg-background-light" style={{ "--color-primary": accentColor } as React.CSSProperties}>
