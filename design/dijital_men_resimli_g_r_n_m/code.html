@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e9590c",
+                        "background-light": "#f8f6f5",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-lg mx-auto min-h-screen bg-white dark:bg-slate-900 shadow-xl flex flex-col">
+<!-- Header Section -->
+<header class="pt-12 pb-8 px-6 text-center border-b border-slate-100 dark:border-slate-800">
+<div class="flex justify-center mb-4">
+<div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-4xl">restaurant</span>
+</div>
+</div>
+<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Doyuran Lezzetler</h1>
+<div class="mt-2 flex items-center justify-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-sm">call</span>
+<span class="text-sm font-medium">0555 123 45 67</span>
+</div>
+</header>
+<!-- Menu Navigation (Optional/Search) -->
+<div class="sticky top-0 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-6 py-3 flex gap-4 overflow-x-auto no-scrollbar">
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-primary text-white text-sm font-semibold">Ana Yemekler</button>
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-medium">Ara Sıcaklar</button>
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-medium">Tatlılar</button>
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-medium">İçecekler</button>
+</div>
+<!-- Main Content -->
+<main class="flex-grow p-6">
+<!-- Section: Ana Yemekler -->
+<section class="mb-10">
+<div class="flex items-center justify-between mb-6 pb-2 border-b-2 border-primary/20">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Ana Yemekler</h2>
+<span class="material-symbols-outlined text-primary">flatware</span>
+</div>
+<div class="space-y-0">
+<!-- Item Row 1 -->
+<div class="group py-5 flex items-start gap-4 border-b border-slate-100 dark:border-slate-800 last:border-0">
+<img alt="Adana Kebap" class="w-20 h-20 object-cover rounded-lg shrink-0 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPJX-VfEc8OM-wV-smSZ-H4JkzNfE8oVB6xkwZx2e5R0ibLf-sb43w9-iBS_9aCfO_KNVcyMA9AAUJUEoLZgBiRRhVT4GBVctEWOMKhgpAjvNnw4rDZTc0TbShtkdHL7ea_ayHCVwyWhpXiDArpMWN41SitBgaBU9-tssSdr2h9KkTDJrdP3AVFoqGVVDkkW09Gd3hr8YPdt3I878eAKUHqR5-E3GrpmCSC5ETBpLW9Z9Q3tRUlUNAoGsVoTzrpCh6edJYUWXiddM"/>
+<div class="flex-grow">
+<div class="flex justify-between items-start gap-2 mb-1">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Adana Kebap</h3>
+<span class="text-lg font-bold text-primary shrink-0">280.00 ₺</span>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Zırh kıyması, özel baharatlar, közlenmiş biber ve domates eşliğinde.</p>
+</div>
+</div>
+<!-- Item Row 2 -->
+<div class="group py-5 flex items-start gap-4 border-b border-slate-100 dark:border-slate-800 last:border-0">
+<img alt="Beyti Sarma" class="w-20 h-20 object-cover rounded-lg shrink-0 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDfsti-Gp-BNkgz2Pfej0Wb5Lr8miCUcWl3X8exuF6_5wIp-z3Jds4-RPQcNbD-Jb3QsXTn5R39-t8C8sQxoE007WhcsVzqfWSIKIS4UCmbXLtqy0Gfn8gTItAOGRRoyHj2Nnt6avisN_C_Z0uvpncBaxYXSsd_q6tIcZuFG3BTz5Tsfej__2i2dqVsLv1p9_qBK17PKfa5S5uTOGtOtgs27rluHf6H8gPfWgvp-oHLJsi86-0cIg2fB23dZ6VQAV1CeqjFzcUzsI"/>
+<div class="flex-grow">
+<div class="flex justify-between items-start gap-2 mb-1">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Beyti Sarma</h3>
+<span class="text-lg font-bold text-primary shrink-0">310.00 ₺</span>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Lavaş içerisinde özel soslu kebap, süzme yoğurt ve tereyağlı sos ile.</p>
+</div>
+</div>
+<!-- Item Row 3 -->
+<div class="group py-5 flex items-start gap-4 border-b border-slate-100 dark:border-slate-800 last:border-0">
+<img alt="Urfa Kebap" class="w-20 h-20 object-cover rounded-lg shrink-0 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0-Gi1oXDLYN_994RaU8dpo5dVFsMJL2OTfevHnF3o2j_fLrM0fB627fKUvGLxv2CPd7Qajse4ZfRIm_GuVWUiLDdLprT5zGXYL53eGFsXbF7AxB6txhDDqNZkRT1MvlTPltK8QW54j7uIkQLuKN9Rd-dHYn3M60goj4zLdaKnkDUryEqVvZDJbNJKiBPJPCa802ncfxmSZjr54i7-9uOCGt5YWwQOh6KfbMkG0nFSYo7LNE4lGOVe2LUdxsTbsq3ZM7ez3IJ-5YI"/>
+<div class="flex-grow">
+<div class="flex justify-between items-start gap-2 mb-1">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Urfa Kebap</h3>
+<span class="text-lg font-bold text-primary shrink-0">270.00 ₺</span>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Acısız zırh kıyması, sumaklı soğan ve lavaş ile servis edilir.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Tatlılar -->
+<section class="mb-10 opacity-60">
+<div class="flex items-center justify-between mb-6 pb-2 border-b-2 border-slate-200 dark:border-slate-700">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Tatlılar</h2>
+<span class="material-symbols-outlined text-slate-400">icecream</span>
+</div>
+<div class="space-y-0">
+<div class="py-5 flex items-start gap-4 border-b border-slate-100 dark:border-slate-800">
+<img alt="Fıstıklı Baklava" class="w-20 h-20 object-cover rounded-lg shrink-0 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpDTQtwYTgznJF7FZ-yfeLj-FLar4d6a8FSWQsabJ3J2TVffQtMTxz_BFEe32KfUuFpUDuQSvB9Ed5NhUlj1ADkODig20qeH5tlfrmzerZ188nzkr1AIA0kDHU_FHPX3zg2MjBIU06OvrnfA0lcQcFvxjMho0dyoJlSqhRvGCk-o2v1wU2Bc715_wSqZp2BoHcmwVyS6fEI6ULBeusmF2kgVAeV_BpquWyz5YlvMJ43PnpGx0VKhp1qyMDTsIgMhiIq1tL7auwKrw"/>
+<div class="flex-grow flex justify-between items-center">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Fıstıklı Baklava</h3>
+<span class="text-lg font-bold text-primary">120.00 ₺</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="py-10 px-6 text-center bg-slate-50 dark:bg-slate-950/50">
+<a class="inline-flex items-center gap-1 text-xs font-medium text-slate-400 dark:text-slate-500 hover:text-primary transition-colors duration-200" href="#">
+<span>menülebizi ile oluşturuldu</span>
+<span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
+<div class="mt-8 flex justify-center gap-6 text-slate-300 dark:text-slate-700">
+<span class="material-symbols-outlined">share</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">info</span>
+</div>
+</footer>
+<!-- Call to Action Floating Button -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-lg px-6 pointer-events-none">
+<button class="pointer-events-auto w-full bg-primary text-white py-4 rounded-xl font-bold shadow-2xl shadow-primary/40 flex items-center justify-center gap-3 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span>Sipariş Ver (WhatsApp)</span>
+</button>
+</div>
+</div>
+</body></html>

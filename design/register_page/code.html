@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kayıt Ol - menülebizi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e9590c",
+                        "background-light": "#f8f6f5",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<div class="flex-1 flex flex-col items-center justify-center px-4 py-12">
+<!-- Logo and Header -->
+<div class="mb-8 flex flex-col items-center gap-3">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1">restaurant_menu</span>
+<h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">menülebizi</h1>
+</div>
+<p class="text-slate-600 dark:text-slate-400 font-medium">Yeni hesap oluşturun</p>
+</div>
+<!-- Registration Card -->
+<div class="w-full max-w-[380px] bg-white dark:bg-slate-900 p-8 rounded-xl border border-primary/10 shadow-sm">
+<form action="#" class="space-y-5" method="POST">
+<!-- Name Field -->
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1" for="name">Adınız</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">person</span>
+<input class="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" id="name" name="name" placeholder="Adınızı ve soyadınızı girin" required="" type="text"/>
+</div>
+</div>
+<!-- Email Field -->
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1" for="email">Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">mail</span>
+<input class="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" id="email" name="email" placeholder="ornek@email.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1" for="password">Şifre</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">lock</span>
+<input class="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" id="password" minlength="6" name="password" placeholder="En az 6 karakter" required="" type="password"/>
+</div>
+</div>
+<!-- Restaurant Name Field -->
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1" for="restaurant">Restoran Adı</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">storefront</span>
+<input class="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" id="restaurant" name="restaurant" placeholder="Restoranınızın adı" required="" type="text"/>
+</div>
+</div>
+<!-- Terms -->
+<div class="flex items-start gap-2 px-1">
+<input class="mt-1 rounded border-slate-300 text-primary focus:ring-primary" id="terms" name="terms" required="" type="checkbox"/>
+<label class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed" for="terms">
+                        Kayıt olarak <a class="text-primary hover:underline" href="#">Kullanım Koşulları</a>'nı kabul etmiş sayılırsınız.
+                    </label>
+</div>
+<!-- Submit Button -->
+<button class="w-full bg-primary hover:bg-orange-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-md shadow-primary/20 flex items-center justify-center gap-2 mt-2" type="submit">
+                    Kayıt Ol
+                    <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</form>
+</div>
+<!-- Footer Link -->
+<div class="mt-8 text-center">
+<p class="text-slate-600 dark:text-slate-400 text-sm">
+                Zaten hesabınız var mı? 
+                <a class="text-primary font-semibold hover:underline decoration-2 underline-offset-4" href="/auth/login">Giriş yapın</a>
+</p>
+</div>
+<!-- Language Switcher (Optional) -->
+<div class="mt-auto pt-12">
+<div class="flex items-center gap-4 text-xs font-medium text-slate-400 uppercase tracking-widest">
+<a class="hover:text-primary transition-colors" href="#">Yardım</a>
+<span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+<a class="hover:text-primary transition-colors" href="#">Gizlilik</a>
+<span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+<a class="hover:text-primary transition-colors" href="#">Şartlar</a>
+</div>
+</div>
+</div>
+</body></html>

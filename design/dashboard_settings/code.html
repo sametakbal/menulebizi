@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e9590c",
+                        "background-light": "#f8f6f5",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>menülebizi - Ayarlar</title>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col fixed h-full transition-colors duration-300">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-bold leading-none">menülebizi</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal mt-1">Restoran Yönetimi</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">dashboard</span>
+<span class="text-sm font-medium">Panel</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">restaurant_menu</span>
+<span class="text-sm font-medium">Menü</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">receipt_long</span>
+<span class="text-sm font-medium">Siparişler</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px] fill-current">settings</span>
+<span class="text-sm font-medium">Ayarlar</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile picture of restaurant manager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9zUV9_rCtmSiKuEQug2g1xHpMtxmhM8sIJkd80RLkzAuCiZSdMe4mK8mWo_idzr1LQnp8GSB8fawZGL5HPMKMz4XaZRrotGKkUVH9nBWyU7CeBOH5uJY4g6fko3UDvLBoOS9s1dF2j-KqSAwL5rAOJK4yACv6S_V-LJJ0keSnp9nUVPxlQ4b40O8ONLX3K784VFNuBjeU4oGc15FkXK4pk0b7mUH4_CJMU9iKspe8KTVHpGjIFbroATVbTtslVUpeQTLlbcqT1Pw"/>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-semibold text-slate-900 dark:text-white">Ahmet Yılmaz</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Yönetici</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-72">
+<div class="max-w-4xl mx-auto py-12 px-8">
+<!-- Header -->
+<div class="mb-10">
+<h2 class="text-3xl font-bold text-slate-900 dark:text-white">Ayarlar</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-2">Restoran bilgilerinizi güncelleyin.</p>
+</div>
+<!-- Settings Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden max-w-lg">
+<div class="p-8">
+<form class="flex flex-col gap-6">
+<!-- Restaurant Name Input -->
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300" for="restaurant_name">Restoran Adı</label>
+<input class="w-full h-12 px-4 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary transition-all" id="restaurant_name" type="text" value="Doyuran Lezzetler"/>
+</div>
+<!-- Phone Input -->
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300" for="phone">Telefon</label>
+<input class="w-full h-12 px-4 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary transition-all" id="phone" type="tel" value="0555 123 45 67"/>
+</div>
+<!-- Success Message & Save Button -->
+<div class="mt-4 flex flex-col gap-3">
+<div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-2 rounded-lg border border-emerald-100 dark:border-emerald-800">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span class="text-sm font-medium">Başarıyla kaydedildi</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 px-6 rounded-lg transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined text-[20px]">save</span>
+                                    Kaydet
+                                </button>
+</div>
+</form>
+</div>
+<!-- Additional Subtle Info -->
+<div class="px-8 py-5 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800">
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed italic">
+                            Bu bilgiler müşterilerinizin dijital menü üzerinde göreceği iletişim bilgileridir. Lütfen güncel olduğundan emin olun.
+                        </p>
+</div>
+</div>
+<!-- Decorative elements/Background patterns -->
+<div class="fixed top-0 right-0 -z-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl opacity-50"></div>
+<div class="fixed bottom-0 left-72 -z-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl opacity-30"></div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e9590c",
+                        "background-light": "#f8f6f5",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>menülebizi - Dashboard</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 md:px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-6">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z"></path>
+</svg>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">menülebizi</h2>
+</div>
+<div class="flex flex-1 justify-center gap-4 md:gap-8 hidden md:flex">
+<nav class="flex items-center gap-2">
+<a class="px-4 py-2 rounded-lg bg-primary/10 text-primary text-sm font-semibold leading-normal" href="#">Genel Bakış</a>
+<a class="px-4 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium leading-normal transition-colors" href="#">Menü Yönetimi</a>
+<a class="px-4 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium leading-normal transition-colors" href="#">Ayarlar</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 text-sm font-bold transition-colors">
+<span class="material-symbols-outlined text-lg">logout</span>
+<span class="hidden sm:inline">Çıkış</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-slate-100 dark:border-slate-800" data-alt="User profile avatar of a smiling man" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBGxRC_CudSRS5PC8Rz7OmP-r6sw2le0kCaBp0HrbNOmDDidDSXUkHO7takj7cCStUFUlP73V-PzGIaRgvWBjyXPC_-h-6DT1hVlr4iME7XpITouBipzJXiv_fis-uzK-dm636eI6Y6Mp7F4IoSTT8r9RhJiLpA3pR5kd_pc40glVe5hYl6hJZ3miM9AaQ_E1xgak0EGURBgj2LBapE7qgtfEYqwS43gf4WhyauZwLLIn3bZiJSFpVNIOO1qSw-ny6vf-dDkqHPG9I")'>
+</div>
+</div>
+</header>
+<main class="flex flex-1 justify-center py-8 md:py-12 px-4 md:px-0">
+<div class="layout-content-container flex flex-col max-w-5xl flex-1 gap-8">
+<div class="flex flex-col gap-2 px-4">
+<h1 class="text-slate-900 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">Hoş geldiniz, Doyuran Lezzetler</h1>
+<p class="text-slate-500 dark:text-slate-400 text-lg font-normal">Bugün menünüzde neler var?</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+<div class="flex flex-col gap-4 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">category</span>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Kategoriler</p>
+</div>
+<p class="text-slate-900 dark:text-white text-4xl font-bold leading-tight">8</p>
+</div>
+<div class="flex flex-col gap-4 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Menü Öğeleri</p>
+</div>
+<p class="text-slate-900 dark:text-white text-4xl font-bold leading-tight">42</p>
+</div>
+<div class="flex flex-col gap-4 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">link</span>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Menü Linki</p>
+</div>
+<p class="text-primary text-lg font-bold truncate leading-tight mt-auto">menulebizi.com/doyuran-lezzetler</p>
+</div>
+</div>
+<div class="px-4">
+<div class="flex flex-col md:flex-row items-center gap-8 rounded-xl p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex flex-col items-center gap-4">
+<div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700">
+<div class="size-48 bg-white p-2 rounded-lg flex items-center justify-center">
+<img alt="QR Code" class="size-full" data-alt="Modern QR code for digital restaurant menu access" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzc2qbE0Rl_wNegNddHbHjVlQT_KIhWO83ZQ8ZgwTK5EFwNeDwX0MnZMedemBgXWwfiCceKyO5c2F37tEsfbypplv07Ira9J6lzpVFWhYQkms7NpnHyzNJQsIpigh4ZAWOerHmMYUtlFY3KYBxN0ouelSAX2CPWANhnvrFmozIfUR7X5ivpN8Zuf356GHi6Ul6hgqBFp1DlEKLQ29Y-2mT6w6c2LMd2G6RggkcqZbQ09lw1HYsP0EYpewit0MLR9FChLfAFj8ZtuI"/>
+</div>
+</div>
+<button class="flex w-full min-w-[160px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-xl h-12 px-6 bg-primary hover:bg-primary/90 text-white text-sm font-bold transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">download</span>
+<span class="truncate">QR Kodu İndir</span>
+</button>
+</div>
+<div class="flex flex-1 flex-col gap-4 text-center md:text-left">
+<h3 class="text-slate-900 dark:text-white text-2xl font-bold leading-tight">QR Kodunuz</h3>
+<p class="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed">
+                                    Müşterilerinizin menünüze kolayca erişebilmesi için bu kodu masalara, vitrininize veya giriş alanınıza yerleştirin. 
+                                    Telefonlarının kamerasıyla taratarak saniyeler içinde tüm lezzetlerinizi keşfedebilirler.
+                                </p>
+<div class="flex flex-col sm:flex-row gap-3 mt-4">
+<div class="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-500 dark:text-slate-400 text-sm">
+<span class="material-symbols-outlined text-base">print</span>
+<span>Yazdırmaya hazır format</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-500 dark:text-slate-400 text-sm">
+<span class="material-symbols-outlined text-base">high_quality</span>
+<span>Yüksek çözünürlüklü PNG/SVG</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="px-4 pb-12">
+<div class="rounded-xl p-8 bg-gradient-to-r from-primary to-orange-600 text-white flex flex-col md:flex-row justify-between items-center gap-6">
+<div>
+<h4 class="text-xl font-bold mb-1">Yeni bir kategori mi eklemek istiyorsunuz?</h4>
+<p class="opacity-90">Menünüzü güncel tutarak müşterilerinize daha iyi bir deneyim sunun.</p>
+</div>
+<button class="bg-white text-primary px-8 py-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-colors shadow-xl">
+                                Menüyü Düzenle
+                            </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>
