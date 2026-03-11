@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#e9590c",
+              "background-light": "#f8f6f5",
+              "background-dark": "#221610",
+            },
+            fontFamily: {
+              "display": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .radio-dot:checked { background-image: url("data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27%23e9590c%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3ccircle cx=%278%27 cy=%278%27 r=%274%27/%3e%3c/svg%3e"); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen flex-col">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 lg:px-40 py-3">
+<div class="flex items-center justify-between max-w-[1200px] mx-auto">
+<div class="flex items-center gap-4">
+<div class="text-primary">
+<svg class="size-8" fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight">menülebizi</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8 items-center">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="#">Genel Bakış</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="#">Menü Yönetimi</a>
+<a class="text-primary text-sm font-bold" href="#">Ayarlar</a>
+</nav>
+<div class="flex gap-3">
+<button class="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-[20px]">person</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center border-2 border-white dark:border-slate-800" data-alt="User profile avatar circle" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCaDN0KQIme4FG2mun6yuw0MW7EWZdfIbwTS4bg1JgK-OJgLcBI1b6LGUAhPZdJBk5AHVnMe8pRWJMV9FDVwD8TVsEKR4-4F9YQJavdCtybEf6GKKzR25uvNQxECwame9Uy4XallY309186iMpc6zc2b2GFBcNb2LcGGR-cgA190_68DIeVUMT5XXR5S5QwGvMl2QuYjH-GaTZNN7TGMhLZo5nPpsyBybQ7EvUprAaODq56t3eWFKuWc8FAQoylaVDproyL_mkw3IM')"></div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-[1200px] mx-auto w-full px-6 lg:px-10 py-8">
+<div class="mb-8">
+<h1 class="text-3xl font-bold tracking-tight mb-2">Görünüm Ayarları</h1>
+<p class="text-slate-500 dark:text-slate-400">Menünüzün müşterilerinize nasıl görüneceğini seçin ve markanızı yansıtın.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<!-- Settings Panel -->
+<div class="lg:col-span-7 space-y-10">
+<!-- Layout Selection -->
+<section>
+<h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">dashboard</span>
+                            Yerleşim Düzeni
+                        </h2>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<!-- Classic List -->
+<label class="relative cursor-pointer group">
+<input checked="" class="peer sr-only" name="layout" type="radio"/>
+<div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 peer-checked:border-primary transition-all bg-white dark:bg-slate-900">
+<div class="aspect-[4/3] rounded-lg bg-slate-100 dark:bg-slate-800 mb-3 flex flex-col p-2 gap-1 overflow-hidden" data-alt="Classic list layout preview icon">
+<div class="h-2 w-3/4 bg-slate-300 dark:bg-slate-700 rounded"></div>
+<div class="h-1 w-1/2 bg-slate-200 dark:bg-slate-700 rounded"></div>
+<div class="mt-2 h-2 w-3/4 bg-slate-300 dark:bg-slate-700 rounded"></div>
+<div class="h-1 w-1/2 bg-slate-200 dark:bg-slate-700 rounded"></div>
+</div>
+<p class="text-sm font-bold">Klasik Liste</p>
+<p class="text-xs text-slate-500">Standart görünüm</p>
+</div>
+<div class="absolute top-2 right-2 hidden peer-checked:block">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+</div>
+</label>
+<!-- Visual Focus -->
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="layout" type="radio"/>
+<div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 peer-checked:border-primary transition-all bg-white dark:bg-slate-900">
+<div class="aspect-[4/3] rounded-lg bg-slate-100 dark:bg-slate-800 mb-3 grid grid-cols-2 gap-1 p-1 overflow-hidden" data-alt="Visual focused grid layout preview icon">
+<div class="aspect-square bg-slate-300 dark:bg-slate-700 rounded"></div>
+<div class="aspect-square bg-slate-300 dark:bg-slate-700 rounded"></div>
+<div class="aspect-square bg-slate-300 dark:bg-slate-700 rounded"></div>
+<div class="aspect-square bg-slate-300 dark:bg-slate-700 rounded"></div>
+</div>
+<p class="text-sm font-bold">Görsel Odaklı</p>
+<p class="text-xs text-slate-500">Büyük resimler</p>
+</div>
+<div class="absolute top-2 right-2 hidden peer-checked:block">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+</div>
+</label>
+<!-- Compact -->
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="layout" type="radio"/>
+<div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 peer-checked:border-primary transition-all bg-white dark:bg-slate-900">
+<div class="aspect-[4/3] rounded-lg bg-slate-100 dark:bg-slate-800 mb-3 flex flex-col p-2 gap-0.5 overflow-hidden" data-alt="Compact dense layout preview icon">
+<div class="h-1 w-full bg-slate-300 dark:bg-slate-700 rounded"></div>
+<div class="h-1 w-full bg-slate-300 dark:bg-slate-700 rounded"></div>
+<div class="h-1 w-full bg-slate-300 dark:bg-slate-700 rounded"></div>
+<div class="h-1 w-full bg-slate-300 dark:bg-slate-700 rounded"></div>
+<div class="h-1 w-full bg-slate-300 dark:bg-slate-700 rounded"></div>
+</div>
+<p class="text-sm font-bold">Kompakt</p>
+<p class="text-xs text-slate-500">Hızlı seçim</p>
+</div>
+<div class="absolute top-2 right-2 hidden peer-checked:block">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Theme Customization -->
+<section>
+<h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">palette</span>
+                            Tema Özelleştirme
+                        </h2>
+<div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-6">
+<div>
+<p class="text-sm font-medium mb-3">Ana Renk</p>
+<div class="flex flex-wrap gap-3">
+<button class="w-10 h-10 rounded-full bg-primary border-4 border-white dark:border-slate-800 ring-2 ring-primary"></button>
+<button class="w-10 h-10 rounded-full bg-blue-600 hover:scale-110 transition-transform"></button>
+<button class="w-10 h-10 rounded-full bg-emerald-600 hover:scale-110 transition-transform"></button>
+<button class="w-10 h-10 rounded-full bg-purple-600 hover:scale-110 transition-transform"></button>
+<button class="w-10 h-10 rounded-full bg-slate-900 dark:bg-slate-200 hover:scale-110 transition-transform"></button>
+<button class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 border border-slate-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+<div>
+<p class="text-sm font-medium mb-3">Yazı Tipi</p>
+<select class="w-full max-w-xs rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary">
+<option>Inter (Varsayılan)</option>
+<option>Roboto</option>
+<option>Poppins</option>
+<option>Playfair Display</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Branding -->
+<section>
+<h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">branding_watermark</span>
+                            Marka ve Görünürlük
+                        </h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+<div>
+<p class="text-sm font-medium">Logo Göster</p>
+<p class="text-xs text-slate-500">Üst menüde logo</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+<div>
+<p class="text-sm font-medium">Fiyatları Gizle</p>
+<p class="text-xs text-slate-500">Sadece liste görünümü</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+<div>
+<p class="text-sm font-medium">Kategori İkonları</p>
+<p class="text-xs text-slate-500">Menü başlıkları yanı</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+<div>
+<p class="text-sm font-medium">Arama Çubuğu</p>
+<p class="text-xs text-slate-500">Hızlı ürün arama</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</section>
+</div>
+<!-- Live Preview -->
+<div class="lg:col-span-5 relative">
+<div class="sticky top-28">
+<h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">smartphone</span>
+                            Canlı Önizleme
+                        </h2>
+<div class="bg-slate-200 dark:bg-slate-800 p-8 rounded-[3rem] border-[8px] border-slate-900 dark:border-slate-700 aspect-[9/18.5] relative overflow-hidden shadow-2xl mx-auto max-w-[300px]">
+<!-- Phone Notch -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-900 rounded-b-2xl z-10"></div>
+<!-- Internal App UI -->
+<div class="bg-white h-full overflow-y-auto scrollbar-hide">
+<div class="p-4 pt-8">
+<div class="flex justify-center mb-6">
+<div class="size-12 bg-primary/10 text-primary flex items-center justify-center rounded-xl">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+</div>
+<div class="space-y-6">
+<div>
+<h3 class="text-sm font-bold border-b-2 border-primary w-fit pb-1 mb-4">Popüler Lezzetler</h3>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="size-16 bg-slate-100 rounded-lg shrink-0 overflow-hidden" data-alt="Food photo placeholder burger">
+<img alt="Classic burger" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsqJ6mnuqDurpECDH6rmSK4oUr0i5cTyuoaRhapjoKcoP6lFehzR1J-ffg-movAujDMGK0gtUzCP5jdOj3qsgFoeFl5EEIaa07hXqm6j7v58zjE2Ft3-GFvF23BzFrzIs8I8NAVknmWcBZfUjpIF0wmxZTv_5uspL4KxwOF3uKVlep6FDowmHT9ojtbq3yze4wTrlIqMfcVyQNZ5E-jaaq7_lQ4GVZt35VrwjXQR7mvvAfsNqt-iqyv8kolxj_hxX0qaSceTPfCcQ"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<p class="text-xs font-bold">Özel Soslu Burger</p>
+<p class="text-xs font-bold text-primary">245 TL</p>
+</div>
+<p class="text-[10px] text-slate-500 line-clamp-2">Dana köfte, karamelize soğan, cheddar peyniri ve özel sosumuz.</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="size-16 bg-slate-100 rounded-lg shrink-0 overflow-hidden" data-alt="Food photo placeholder pizza">
+<img alt="Margarita pizza" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqXrjzCm9-YctUTLn1nDi8bG-ZoakcRqJc4w4WB9L_Z2HPap5x5iN87u_fdsHa-hvZ1B9DHvlwtp2jtbiHH0r-LvC3sLLwSJBhj2EwDp8hiqzei8iIHiz26rCD7RCwX5VOW3X7J4rTtbmin-d0JiWHly3f1antGoIyRIOqK3Fwk8AND5lXAUi8PsFMy5vB7McCqu8F29sH5qQPWKAEJzJBQJ74K78bWXW6pxtb9o0EKBEJJP7apTp9cmSQqqvFNAFA9onuwuAtGo8"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<p class="text-xs font-bold">Pizza Margarita</p>
+<p class="text-xs font-bold text-primary">190 TL</p>
+</div>
+<p class="text-[10px] text-slate-500 line-clamp-2">Taze fesleğen, mozarella peyniri ve özel domates sosu.</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="size-16 bg-slate-100 rounded-lg shrink-0 overflow-hidden" data-alt="Food photo placeholder salad">
+<img alt="Garden salad" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxME1vKVZbQ4m6wGJgPUMNpq7WXfPU3YnA6Nf_A5C7NVrz_21s_t1DUSs-2RgUN7GGMihHOSSj5hmpYM35NtiSVsYwcUWZbqYHukysI2xtWysLP08vVyepGnYY78tAyRtYVUs0QI_kFbsnHrknqswPcBAs0ANbUv3hiU03PLasQXP4SBo26bA8p-BDQ1DjH85u5d4WfqETPmZEnW-4fQOOUmMV-sfG99arT5wygkAMsE-plQS17DOJQ-gMFhmTmUPhsnpDRWNgttA"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<p class="text-xs font-bold">Bahçe Salatası</p>
+<p class="text-xs font-bold text-primary">155 TL</p>
+</div>
+<p class="text-[10px] text-slate-500 line-clamp-2">Mevsim yeşillikleri, cherry domates, ceviz ve nar ekşisi.</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h3 class="text-sm font-bold border-b-2 border-slate-200 w-fit pb-1 mb-4">Soğuk İçecekler</h3>
+<div class="flex justify-between items-center py-2 border-b border-slate-50">
+<p class="text-xs">Ev Yapımı Limonata</p>
+<p class="text-xs font-medium">65 TL</p>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-slate-50">
+<p class="text-xs">Taze Portakal Suyu</p>
+<p class="text-xs font-medium">85 TL</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p class="text-center text-xs text-slate-500 mt-4 italic">Önizleme cihaz boyutuna göre ölçeklenir.</p>
+</div>
+</div>
+</div>
+<!-- Action Bar Footer -->
+<div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 flex items-center justify-end gap-4">
+<button class="px-6 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    Sıfırla
+                </button>
+<button class="bg-primary text-white px-8 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:opacity-90 transition-opacity shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">save</span>
+                    Değişiklikleri Kaydet
+                </button>
+</div>
+</main>
+</div>
+</body></html>

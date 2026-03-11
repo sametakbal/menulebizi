@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { name, description, price, categoryId } = await req.json();
+    const { name, description, price, categoryId, imageUrl } = await req.json();
 
     if (!name || price === undefined || !categoryId) {
         return NextResponse.json({ error: "Gerekli alanlar eksik" }, { status: 400 });
@@ -68,6 +68,7 @@ export async function POST(req: NextRequest) {
         restaurantId: session.restaurantId,
         isAvailable: true,
         order: maxOrder,
+        imageUrl: imageUrl || "",
         createdAt: new Date().toISOString(),
     });
 
@@ -79,6 +80,7 @@ export async function POST(req: NextRequest) {
         categoryId,
         isAvailable: true,
         order: maxOrder,
+        imageUrl: imageUrl || "",
     });
 }
 
@@ -99,7 +101,7 @@ export async function PATCH(req: NextRequest) {
         return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    const allowedFields = ["name", "description", "price", "isAvailable", "order"];
+    const allowedFields = ["name", "description", "price", "isAvailable", "order", "imageUrl"];
     const sanitized: Record<string, unknown> = {};
     for (const key of allowedFields) {
         if (updates[key] !== undefined) {

@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { storage } from "@/lib/firebase";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import Image from "next/image";
 
 interface Item {
     id: string;
@@ -9,6 +12,7 @@ interface Item {
     price: number;
     isAvailable: boolean;
     categoryId: string;
+    imageUrl?: string;
 }
 
 interface Category {
@@ -34,6 +38,11 @@ export default function MenuManagementPage() {
         price: "",
         categoryId: "",
     });
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [existingImageUrl, setExistingImageUrl] = useState<string>("");
+    const [uploadingImage, setUploadingImage] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const fetchData = useCallback(async () => {
         try {
@@ -89,6 +98,9 @@ export default function MenuManagementPage() {
     const openNewItem = (categoryId: string) => {
         setEditingItem(null);
         setItemForm({ name: "", description: "", price: "", categoryId });
+        setImageFile(null);
+        setImagePreview(null);
+        setExistingImageUrl("");
         setShowItemForm(true);
     };
 
@@ -100,53 +112,102 @@ export default function MenuManagementPage() {
             price: String(item.price),
             categoryId: item.categoryId,
         });
+        setImageFile(null);
+        setImagePreview(null);
+        setExistingImageUrl(item.imageUrl || "");
         setShowItemForm(true);
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setImageFile(file);
+        const reader = new FileReader();
+        reader.onload = () => setImagePreview(reader.result as string);
+        reader.readAsDataURL(file);
+    };
+
+    const removeImage = () => {
+        setImageFile(null);
+        setImagePreview(null);
+        setExistingImageUrl("");
+        if (fileInputRef.current) fileInputRef.current.value = "";
+    };
+
+    const uploadImage = async (file: File, itemId: string): Promise<string> => {
+        const ext = file.name.split(".").pop();
+        const storageRef = ref(storage, `items/${itemId}/image.${ext}`);
+        await uploadBytes(storageRef, file);
+        return getDownloadURL(storageRef);
+    };
+
+    const patchItem = (id: string, data: Record<string, unknown>) =>
+        fetch("/api/items", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, ...data }),
+        });
+
+    const updateExistingItem = async () => {
+        if (!editingItem) return;
+        let imageUrl = existingImageUrl;
+
+        if (imageFile) {
+            if (editingItem.imageUrl) {
+                try { await deleteObject(ref(storage, editingItem.imageUrl)); } catch { /* ignore */ }
+            }
+            imageUrl = await uploadImage(imageFile, editingItem.id);
+        }
+
+        const updates = {
+            name: itemForm.name.trim(),
+            description: itemForm.description.trim(),
+            price: Number.parseFloat(itemForm.price),
+            imageUrl,
+        };
+        const res = await patchItem(editingItem.id, updates);
+        if (res.ok) {
+            setItems((prev) => prev.map((i) => i.id === editingItem.id ? { ...i, ...updates } : i));
+        }
+    };
+
+    const createNewItem = async () => {
+        const res = await fetch("/api/items", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: itemForm.name.trim(),
+                description: itemForm.description.trim(),
+                price: Number.parseFloat(itemForm.price),
+                categoryId: itemForm.categoryId,
+            }),
+        });
+        if (!res.ok) return;
+        const item = await res.json();
+
+        if (imageFile) {
+            const imageUrl = await uploadImage(imageFile, item.id);
+            await patchItem(item.id, { imageUrl });
+            item.imageUrl = imageUrl;
+        }
+
+        setItems((prev) => [...prev, item]);
     };
 
     const saveItem = async () => {
         if (!itemForm.name.trim() || !itemForm.price || !itemForm.categoryId) return;
+        setUploadingImage(true);
 
-        if (editingItem) {
-            const res = await fetch("/api/items", {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    id: editingItem.id,
-                    name: itemForm.name.trim(),
-                    description: itemForm.description.trim(),
-                    price: parseFloat(itemForm.price),
-                }),
-            });
-            if (res.ok) {
-                setItems((prev) =>
-                    prev.map((i) =>
-                        i.id === editingItem.id
-                            ? {
-                                ...i,
-                                name: itemForm.name.trim(),
-                                description: itemForm.description.trim(),
-                                price: parseFloat(itemForm.price),
-                            }
-                            : i
-                    )
-                );
+        try {
+            if (editingItem) {
+                await updateExistingItem();
+            } else {
+                await createNewItem();
             }
-        } else {
-            const res = await fetch("/api/items", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: itemForm.name.trim(),
-                    description: itemForm.description.trim(),
-                    price: parseFloat(itemForm.price),
-                    categoryId: itemForm.categoryId,
-                }),
-            });
-            if (res.ok) {
-                const item = await res.json();
-                setItems((prev) => [...prev, item]);
-            }
+        } finally {
+            setUploadingImage(false);
         }
+
         setShowItemForm(false);
         setEditingItem(null);
     };
@@ -168,6 +229,7 @@ export default function MenuManagementPage() {
 
     const deleteItem = async (id: string) => {
         if (!confirm("Bu ürünü silmek istediğinize emin misiniz?")) return;
+        const item = items.find((i) => i.id === id);
         const res = await fetch("/api/items", {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
@@ -175,8 +237,19 @@ export default function MenuManagementPage() {
         });
         if (res.ok) {
             setItems((prev) => prev.filter((i) => i.id !== id));
+            // Delete image from storage if exists
+            if (item?.imageUrl) {
+                try {
+                    const imgRef = ref(storage, item.imageUrl);
+                    await deleteObject(imgRef);
+                } catch {
+                    // ignore
+                }
+            }
         }
     };
+
+    const currentImage = imagePreview || existingImageUrl;
 
     if (loading) {
         return (
@@ -223,7 +296,7 @@ export default function MenuManagementPage() {
             {categories.length === 0 ? (
                 <div className="text-center py-16 text-slate-400">
                     <span className="material-symbols-outlined text-5xl mb-3 block">restaurant_menu</span>
-                    Henüz kategori eklenmemiş. Yukarıdan ilk kategorinizi ekleyin.
+                    {" "}Henüz kategori eklenmemiş. Yukarıdan ilk kategorinizi ekleyin.
                 </div>
             ) : (
                 categories.map((cat) => {
@@ -242,14 +315,14 @@ export default function MenuManagementPage() {
                                         className="flex items-center gap-1 px-3 py-1.5 text-sm bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors font-semibold"
                                     >
                                         <span className="material-symbols-outlined text-base">add</span>
-                                        Ürün Ekle
+                                        {" "}Ürün Ekle
                                     </button>
                                     <button
                                         onClick={() => deleteCategory(cat.id)}
                                         className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-500 hover:bg-red-50 rounded-lg transition-colors font-semibold"
                                     >
                                         <span className="material-symbols-outlined text-base">delete</span>
-                                        Sil
+                                        {" "}Sil
                                     </button>
                                 </div>
                             </div>
@@ -257,7 +330,7 @@ export default function MenuManagementPage() {
                             {catItems.length === 0 ? (
                                 <div className="px-6 py-10 text-center text-slate-400 text-sm">
                                     <span className="material-symbols-outlined text-3xl mb-2 block">inventory_2</span>
-                                    Bu kategoride henüz ürün yok.
+                                    {" "}Bu kategoride henüz ürün yok.
                                 </div>
                             ) : (
                                 <ul className="divide-y divide-slate-100">
@@ -266,12 +339,26 @@ export default function MenuManagementPage() {
                                             key={item.id}
                                             className="px-6 py-4 flex items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors"
                                         >
+                                            {item.imageUrl ? (
+                                                <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0 border border-slate-100">
+                                                    <Image
+                                                        src={item.imageUrl}
+                                                        alt={item.name}
+                                                        fill
+                                                        className="object-cover"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className="w-14 h-14 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                                                    <span className="material-symbols-outlined text-slate-300 text-2xl">image</span>
+                                                </div>
+                                            )}
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center gap-2">
                                                     <p
-                                                        className={`font-semibold ${!item.isAvailable
-                                                            ? "text-slate-400 line-through"
-                                                            : "text-slate-900"
+                                                        className={`font-semibold ${item.isAvailable
+                                                            ? "text-slate-900"
+                                                            : "text-slate-400 line-through"
                                                             }`}
                                                     >
                                                         {item.name}
@@ -370,6 +457,54 @@ export default function MenuManagementPage() {
                                 placeholder="Fiyat (₺)"
                                 className="w-full px-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                             />
+
+                            {/* Image Upload */}
+                            <div>
+                                {currentImage ? (
+                                    <div className="relative">
+                                        <div className="relative w-full h-40 rounded-xl overflow-hidden border border-slate-200">
+                                            <Image
+                                                src={currentImage}
+                                                alt="Ürün resmi"
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={removeImage}
+                                            className="absolute top-2 right-2 p-1 bg-white rounded-full shadow border border-slate-200 text-slate-500 hover:text-red-600 transition-colors"
+                                        >
+                                            <span className="material-symbols-outlined text-base">close</span>
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="w-full h-24 border-2 border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center gap-1 text-slate-400 hover:border-primary/40 hover:text-primary/60 transition-colors"
+                                    >
+                                        <span className="material-symbols-outlined text-2xl">add_photo_alternate</span>
+                                        <span className="text-sm font-medium">Resim ekle</span>
+                                    </button>
+                                )}
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="hidden"
+                                />
+                                {currentImage && (
+                                    <button
+                                        type="button"
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="mt-2 text-sm text-primary hover:underline"
+                                    >
+                                        Resmi değiştir
+                                    </button>
+                                )}
+                            </div>
                         </div>
                         <div className="flex justify-end gap-3 mt-8">
                             <button
@@ -383,8 +518,12 @@ export default function MenuManagementPage() {
                             </button>
                             <button
                                 onClick={saveItem}
-                                className="px-6 h-11 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-bold shadow-sm shadow-primary/20"
+                                disabled={uploadingImage}
+                                className="px-6 h-11 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-bold shadow-sm shadow-primary/20 disabled:opacity-60 flex items-center gap-2"
                             >
+                                {uploadingImage && (
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                                )}
                                 {editingItem ? "Güncelle" : "Ekle"}
                             </button>
                         </div>

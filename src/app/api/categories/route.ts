@@ -33,7 +33,6 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Kategori adı zorunludur" }, { status: 400 });
         }
 
-        // Get current max order
         const snapshot = await adminDb
             .collection("categories")
             .where("restaurantId", "==", session.restaurantId)
