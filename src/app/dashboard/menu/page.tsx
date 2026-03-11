@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { storage } from "@/lib/firebase";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Item {
     id: string;
@@ -22,6 +23,7 @@ interface Category {
 }
 
 export default function MenuManagementPage() {
+    const { t } = useLanguage();
     const [categories, setCategories] = useState<Category[]>([]);
     const [items, setItems] = useState<Item[]>([]);
     const [loading, setLoading] = useState(true);
@@ -55,7 +57,7 @@ export default function MenuManagementPage() {
             setCategories(Array.isArray(catData) ? catData : []);
             setItems(Array.isArray(itemData) ? itemData : []);
         } catch {
-            console.error("Veri yükleme hatası");
+            console.error("Failed to load data");
         } finally {
             setLoading(false);
         }
@@ -81,7 +83,7 @@ export default function MenuManagementPage() {
     };
 
     const deleteCategory = async (id: string) => {
-        if (!confirm("Bu kategori ve içindeki tüm ürünler silinecek. Emin misiniz?"))
+        if (!confirm(t("menu.confirmDeleteCategory")))
             return;
         const res = await fetch("/api/categories", {
             method: "DELETE",
@@ -228,7 +230,7 @@ export default function MenuManagementPage() {
     };
 
     const deleteItem = async (id: string) => {
-        if (!confirm("Bu ürünü silmek istediğinize emin misiniz?")) return;
+        if (!confirm(t("menu.confirmDeleteItem"))) return;
         const item = items.find((i) => i.id === id);
         const res = await fetch("/api/items", {
             method: "DELETE",
@@ -262,17 +264,15 @@ export default function MenuManagementPage() {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-2xl font-black text-slate-900">Menü Yönetimi</h1>
-                <p className="text-slate-500 mt-1">
-                    Kategoriler ve menü öğelerinizi buradan yönetebilirsiniz.
-                </p>
+                <h1 className="text-2xl font-black text-slate-900">{t("menu.title")}</h1>
+                <p className="text-slate-500 mt-1">{t("menu.subtitle")}</p>
             </div>
 
             {/* Add Category */}
             <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
                     <span className="material-symbols-outlined text-primary">add_circle</span>
-                    <h2 className="text-lg font-bold text-slate-900">Yeni Kategori Ekle</h2>
+                    <h2 className="text-lg font-bold text-slate-900">{t("menu.addCategoryTitle")}</h2>
                 </div>
                 <div className="flex gap-3">
                     <input
@@ -280,14 +280,14 @@ export default function MenuManagementPage() {
                         value={newCategoryName}
                         onChange={(e) => setNewCategoryName(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && addCategory()}
-                        placeholder="Kategori adı (ör: Ana Yemekler)"
+                        placeholder={t("menu.categoryPlaceholder")}
                         className="flex-1 px-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                     />
                     <button
                         onClick={addCategory}
                         className="px-6 h-12 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-bold shadow-sm shadow-primary/20"
                     >
-                        Ekle
+                        {t("menu.addButton")}
                     </button>
                 </div>
             </div>
@@ -296,7 +296,7 @@ export default function MenuManagementPage() {
             {categories.length === 0 ? (
                 <div className="text-center py-16 text-slate-400">
                     <span className="material-symbols-outlined text-5xl mb-3 block">restaurant_menu</span>
-                    {" "}Henüz kategori eklenmemiş. Yukarıdan ilk kategorinizi ekleyin.
+                    {t("menu.noCategories")}
                 </div>
             ) : (
                 categories.map((cat) => {
@@ -315,14 +315,14 @@ export default function MenuManagementPage() {
                                         className="flex items-center gap-1 px-3 py-1.5 text-sm bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors font-semibold"
                                     >
                                         <span className="material-symbols-outlined text-base">add</span>
-                                        {" "}Ürün Ekle
+                                        {" "}{t("menu.addItem")}
                                     </button>
                                     <button
                                         onClick={() => deleteCategory(cat.id)}
                                         className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-500 hover:bg-red-50 rounded-lg transition-colors font-semibold"
                                     >
                                         <span className="material-symbols-outlined text-base">delete</span>
-                                        {" "}Sil
+                                        {" "}{t("menu.deleteCategory")}
                                     </button>
                                 </div>
                             </div>
@@ -330,7 +330,7 @@ export default function MenuManagementPage() {
                             {catItems.length === 0 ? (
                                 <div className="px-6 py-10 text-center text-slate-400 text-sm">
                                     <span className="material-symbols-outlined text-3xl mb-2 block">inventory_2</span>
-                                    {" "}Bu kategoride henüz ürün yok.
+                                    {t("menu.noItems")}
                                 </div>
                             ) : (
                                 <ul className="divide-y divide-slate-100">
@@ -367,7 +367,7 @@ export default function MenuManagementPage() {
                                                         ? "bg-green-50 text-green-700 border border-green-200"
                                                         : "bg-slate-100 text-slate-500 border border-slate-200"
                                                         }`}>
-                                                        {item.isAvailable ? "Aktif" : "Pasif"}
+                                                        {item.isAvailable ? t("menu.active") : t("menu.inactive")}
                                                     </span>
                                                 </div>
                                                 {item.description && (
@@ -386,7 +386,7 @@ export default function MenuManagementPage() {
                                                         ? "text-green-600 hover:bg-green-50"
                                                         : "text-slate-400 hover:bg-slate-100"
                                                         }`}
-                                                    title={item.isAvailable ? "Pasife al" : "Aktife al"}
+                                                    title={item.isAvailable ? t("menu.deactivate") : t("menu.activate")}
                                                 >
                                                     <span className="material-symbols-outlined text-lg">
                                                         {item.isAvailable ? "toggle_on" : "toggle_off"}
@@ -395,14 +395,14 @@ export default function MenuManagementPage() {
                                                 <button
                                                     onClick={() => openEditItem(item)}
                                                     className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                                    title="Düzenle"
+                                                    title={t("menu.edit")}
                                                 >
                                                     <span className="material-symbols-outlined text-lg">edit</span>
                                                 </button>
                                                 <button
                                                     onClick={() => deleteItem(item.id)}
                                                     className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                                    title="Sil"
+                                                    title={t("menu.delete")}
                                                 >
                                                     <span className="material-symbols-outlined text-lg">delete</span>
                                                 </button>
@@ -425,7 +425,7 @@ export default function MenuManagementPage() {
                                 {editingItem ? "edit" : "add_circle"}
                             </span>
                             <h3 className="text-lg font-bold text-slate-900">
-                                {editingItem ? "Ürünü Düzenle" : "Yeni Ürün Ekle"}
+                                {editingItem ? t("menu.editItemTitle") : t("menu.newItemTitle")}
                             </h3>
                         </div>
                         <div className="space-y-4">
@@ -435,7 +435,7 @@ export default function MenuManagementPage() {
                                 onChange={(e) =>
                                     setItemForm((f) => ({ ...f, name: e.target.value }))
                                 }
-                                placeholder="Ürün adı"
+                                placeholder={t("menu.itemName")}
                                 className="w-full px-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                             />
                             <input
@@ -444,7 +444,7 @@ export default function MenuManagementPage() {
                                 onChange={(e) =>
                                     setItemForm((f) => ({ ...f, description: e.target.value }))
                                 }
-                                placeholder="Açıklama (isteğe bağlı)"
+                                placeholder={t("menu.itemDescription")}
                                 className="w-full px-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                             />
                             <input
@@ -454,7 +454,7 @@ export default function MenuManagementPage() {
                                 onChange={(e) =>
                                     setItemForm((f) => ({ ...f, price: e.target.value }))
                                 }
-                                placeholder="Fiyat (₺)"
+                                placeholder={t("menu.itemPrice")}
                                 className="w-full px-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                             />
 
@@ -485,7 +485,7 @@ export default function MenuManagementPage() {
                                         className="w-full h-24 border-2 border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center gap-1 text-slate-400 hover:border-primary/40 hover:text-primary/60 transition-colors"
                                     >
                                         <span className="material-symbols-outlined text-2xl">add_photo_alternate</span>
-                                        <span className="text-sm font-medium">Resim ekle</span>
+                                        <span className="text-sm font-medium">{t("menu.addImage")}</span>
                                     </button>
                                 )}
                                 <input
@@ -501,7 +501,7 @@ export default function MenuManagementPage() {
                                         onClick={() => fileInputRef.current?.click()}
                                         className="mt-2 text-sm text-primary hover:underline"
                                     >
-                                        Resmi değiştir
+                                        {t("menu.changeImage")}
                                     </button>
                                 )}
                             </div>
@@ -514,7 +514,7 @@ export default function MenuManagementPage() {
                                 }}
                                 className="px-5 h-11 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-colors font-semibold"
                             >
-                                İptal
+                                {t("menu.cancel")}
                             </button>
                             <button
                                 onClick={saveItem}
@@ -524,7 +524,7 @@ export default function MenuManagementPage() {
                                 {uploadingImage && (
                                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
                                 )}
-                                {editingItem ? "Güncelle" : "Ekle"}
+                                {editingItem ? t("menu.update") : t("menu.addButton")}
                             </button>
                         </div>
                     </div>

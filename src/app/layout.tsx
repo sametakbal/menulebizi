@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { getLocale } from "@/lib/i18n/getLocale";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,13 +15,15 @@ export const metadata: Metadata = {
     "Restoranınızın menüsünü kolayca oluşturun, QR kod ile paylaşın. Müşterileriniz telefonlarından menünüze ulaşsın.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+
   return (
-    <html lang="tr">
+    <html lang={locale}>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
@@ -27,7 +31,9 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} antialiased`}>
-        {children}
+        <LanguageProvider initialLocale={locale}>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

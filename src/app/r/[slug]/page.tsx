@@ -2,6 +2,8 @@ import { adminDb } from "@/lib/firebase-admin";
 import { notFound } from "next/navigation";
 import CategorySection from "@/components/CategorySection";
 import type { MenuLayout } from "@/components/MenuCard";
+import { getLocale } from "@/lib/i18n/getLocale";
+import { getT } from "@/lib/i18n";
 
 interface Item {
     id: string;
@@ -25,7 +27,8 @@ export default async function PublicMenuPage({
 }: {
     params: Promise<{ slug: string }>;
 }) {
-    const { slug } = await params;
+    const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+    const t = getT(locale);
 
     // Find restaurant by slug
     const restaurantSnap = await adminDb
@@ -113,7 +116,7 @@ export default async function PublicMenuPage({
                     {categories.length === 0 && (
                         <div className="text-center py-16 text-slate-400">
                             <span className="material-symbols-outlined text-5xl mb-3 block">restaurant_menu</span>
-                            Menü henüz hazırlanmamış.
+                            {t("publicMenu.notReady")}
                         </div>
                     )}
                 </div>
@@ -122,7 +125,7 @@ export default async function PublicMenuPage({
                 <div className="mt-12 pt-6 border-t border-slate-200 text-center">
                     <a href="/" className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-primary transition-colors">
                         <span className="material-symbols-outlined text-sm">restaurant_menu</span>
-                        <span className="font-bold">menülebizi</span> ile oluşturuldu
+                        <span className="font-bold">menülebizi</span> {t("publicMenu.poweredBy")}
                     </a>
                 </div>
             </div>

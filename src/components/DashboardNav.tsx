@@ -3,16 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import type { TranslationKey } from "@/lib/i18n";
 
-const navItems = [
-    { href: "/dashboard", label: "Genel Bakış", icon: "dashboard" },
-    { href: "/dashboard/menu", label: "Menü Yönetimi", icon: "restaurant_menu" },
-    { href: "/dashboard/settings", label: "Ayarlar", icon: "settings" },
+const navItems: { href: string; labelKey: TranslationKey; icon: string }[] = [
+    { href: "/dashboard", labelKey: "nav.overview", icon: "dashboard" },
+    { href: "/dashboard/menu", labelKey: "nav.menuManagement", icon: "restaurant_menu" },
+    { href: "/dashboard/settings", labelKey: "nav.settings", icon: "settings" },
 ];
 
 export default function DashboardNav() {
     const pathname = usePathname();
     const { logout } = useAuth();
+    const { t } = useLanguage();
 
     return (
         <nav className="bg-white border-b border-slate-100">
@@ -32,15 +36,18 @@ export default function DashboardNav() {
                                 }`}
                         >
                             <span className="material-symbols-outlined text-lg">{item.icon}</span>
-                            <span className="hidden sm:inline">{item.label}</span>
+                            <span className="hidden sm:inline">{t(item.labelKey)}</span>
                         </Link>
                     ))}
+                    <div className="hidden sm:flex ml-2">
+                        <LanguageSwitcher variant="compact" />
+                    </div>
                     <button
                         onClick={() => logout()}
-                        className="ml-3 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                        className="ml-2 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
                     >
                         <span className="material-symbols-outlined text-lg">logout</span>
-                        <span className="hidden sm:inline">Çıkış</span>
+                        <span className="hidden sm:inline">{t("nav.logout")}</span>
                     </button>
                 </div>
             </div>

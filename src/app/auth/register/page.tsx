@@ -5,9 +5,12 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function RegisterPage() {
     const router = useRouter();
+    const { t } = useLanguage();
     const [form, setForm] = useState({
         name: "",
         email: "",
@@ -17,13 +20,12 @@ export default function RegisterPage() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError("");
         setLoading(true);
 
         try {
-            // 1. Create Firebase Auth user
             const userCredential = await createUserWithEmailAndPassword(
                 auth,
                 form.email,
@@ -31,7 +33,6 @@ export default function RegisterPage() {
             );
             const idToken = await userCredential.user.getIdToken();
 
-            // 2. Create restaurant + user doc in Firestore via API
             const res = await fetch("/api/register", {
                 method: "POST",
                 headers: {
@@ -47,11 +48,10 @@ export default function RegisterPage() {
             const data = await res.json();
 
             if (!res.ok) {
-                setError(data.error || "Bir hata oluştu");
+                setError(data.error || t("auth.registerError"));
                 return;
             }
 
-            // 3. Create session cookie
             await fetch("/api/session", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -60,7 +60,7 @@ export default function RegisterPage() {
 
             router.push("/dashboard");
         } catch {
-            setError("Kayıt sırasında bir hata oluştu");
+            setError(t("auth.registerError"));
         } finally {
             setLoading(false);
         }
@@ -74,75 +74,78 @@ export default function RegisterPage() {
                         <span className="material-symbols-outlined text-3xl font-bold text-primary">restaurant_menu</span>
                         <span className="text-2xl font-black tracking-tight text-primary">menülebizi</span>
                     </Link>
-                    <p className="text-slate-500 mt-2">Yeni hesap oluşturun</p>
+                    <p className="text-slate-500 mt-2">{t("auth.registerTitle")}</p>
+                    <div className="flex justify-center mt-3">
+                        <LanguageSwitcher variant="compact" />
+                    </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-slate-200 p-8 space-y-5 shadow-sm">
                     <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                            Adınız
+                        <label htmlFor="reg-name" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                            {t("auth.nameLabel")}
                         </label>
                         <div className="relative">
                             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">person</span>
                             <input
+                                id="reg-name"
                                 type="text"
                                 value={form.name}
                                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                                 required
-                                placeholder="Adınızı girin"
+                                placeholder={t("auth.namePlaceholder")}
                                 className="w-full pl-10 pr-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                             />
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                            Email
+                        <label htmlFor="reg-email" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                            {t("auth.emailLabel")}
                         </label>
                         <div className="relative">
                             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">mail</span>
                             <input
+                                id="reg-email"
                                 type="email"
                                 value={form.email}
                                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                                 required
-                                placeholder="ornek@email.com"
+                                placeholder={t("auth.emailPlaceholder")}
                                 className="w-full pl-10 pr-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                             />
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                            Şifre
+                        <label htmlFor="reg-password" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                            {t("auth.passwordLabel")}
                         </label>
                         <div className="relative">
                             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">lock</span>
                             <input
+                                id="reg-password"
                                 type="password"
                                 value={form.password}
-                                onChange={(e) =>
-                                    setForm((f) => ({ ...f, password: e.target.value }))
-                                }
+                                onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
                                 required
                                 minLength={6}
-                                placeholder="En az 6 karakter"
+                                placeholder={t("auth.passwordPlaceholder")}
                                 className="w-full pl-10 pr-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                             />
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                            Restoran Adı
+                        <label htmlFor="reg-restaurant" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                            {t("auth.restaurantNameLabel")}
                         </label>
                         <div className="relative">
                             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">storefront</span>
                             <input
+                                id="reg-restaurant"
                                 type="text"
                                 value={form.restaurantName}
-                                onChange={(e) =>
-                                    setForm((f) => ({ ...f, restaurantName: e.target.value }))
-                                }
+                                onChange={(e) => setForm((f) => ({ ...f, restaurantName: e.target.value }))}
                                 required
-                                placeholder="Restoran adını girin"
+                                placeholder={t("auth.restaurantPlaceholder")}
                                 className="w-full pl-10 pr-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                             />
                         </div>
@@ -160,9 +163,9 @@ export default function RegisterPage() {
                         disabled={loading}
                         className="w-full h-12 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-bold disabled:opacity-50 shadow-sm shadow-primary/20 flex items-center justify-center gap-2"
                     >
-                        {loading ? "Kayıt yapılıyor..." : (
+                        {loading ? t("auth.registering") : (
                             <>
-                                Kayıt Ol
+                                {t("auth.registerButton")}
                                 <span className="material-symbols-outlined text-xl">arrow_forward</span>
                             </>
                         )}
@@ -170,9 +173,9 @@ export default function RegisterPage() {
                 </form>
 
                 <p className="text-center text-sm text-slate-500 mt-6">
-                    Zaten hesabınız var mı?{" "}
+                    {t("auth.hasAccount")}{" "}
                     <Link href="/auth/login" className="text-primary font-semibold hover:underline">
-                        Giriş yapın
+                        {t("auth.signIn")}
                     </Link>
                 </p>
             </div>
