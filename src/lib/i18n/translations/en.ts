@@ -115,6 +115,7 @@ export const en = {
         showPricesDesc: "Display item prices on your menu.",
         currencyTitle: "Currency",
         currencyDesc: "Symbol shown next to prices.",
+        previewTitle: "Live Preview",
         saveNote: "Changes will reflect on your menu immediately after saving.",
         save: "Save",
         saving: "Saving...",
@@ -124,5 +125,8 @@ export const en = {
     publicMenu: {
         notReady: "Menu is not ready yet.",
         poweredBy: "powered by",
+        demoBadge: "Demo Menu",
+        demoDesc: "This menu is for demonstration purposes. Sign up to create your own.",
+        demoSignup: "Get Started Free",
     },
 } as const;

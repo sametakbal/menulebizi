@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import type { MenuLayout } from "@/components/MenuCard";
 import { useLanguage } from "@/contexts/LanguageContext";
+import MenuPreview from "@/components/MenuPreview";
 
 const LAYOUT_PREVIEWS: Record<MenuLayout, React.ReactNode> = {
     classic: (
@@ -118,177 +119,190 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="space-y-8 max-w-2xl">
-            <div>
+        <div>
+            <div className="mb-8">
                 <h1 className="text-2xl font-black text-slate-900">{t("settings.title")}</h1>
                 <p className="text-slate-500 mt-1">{t("settings.subtitle")}</p>
             </div>
 
-            {/* Restaurant Info */}
-            <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-5">
-                    <span className="material-symbols-outlined text-primary">storefront</span>
-                    <h2 className="text-lg font-bold text-slate-900">{t("settings.restaurantInfoTitle")}</h2>
-                </div>
-                <div className="space-y-4">
-                    <div>
-                        <label htmlFor="restaurant-name" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                            {t("settings.restaurantName")}
-                        </label>
-                        <div className="relative">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">storefront</span>
-                            <input
-                                id="restaurant-name"
-                                type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                className="w-full pl-10 pr-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <label htmlFor="restaurant-phone" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                            {t("settings.phone")}
-                        </label>
-                        <div className="relative">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">phone</span>
-                            <input
-                                id="restaurant-phone"
-                                type="tel"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                placeholder={t("settings.phonePlaceholder")}
-                                className="w-full pl-10 pr-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div className="flex gap-8 items-start">
+                {/* Settings column */}
+                <div className="space-y-8 flex-1 min-w-0 max-w-2xl">
 
-            {/* Layout Selection */}
-            <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-5">
-                    <span className="material-symbols-outlined text-primary">dashboard</span>
-                    <h2 className="text-lg font-bold text-slate-900">{t("settings.menuLayoutTitle")}</h2>
-                </div>
-                <p className="text-sm text-slate-500 mb-4">{t("settings.menuLayoutDesc")}</p>
-                <div className="grid grid-cols-3 gap-3">
-                    {LAYOUT_VALUES.map((value) => (
-                        <button
-                            key={value}
-                            type="button"
-                            onClick={() => setMenuLayout(value)}
-                            className={`relative p-3 rounded-xl border-2 text-left transition-all ${
-                                menuLayout === value
-                                    ? "border-primary bg-primary/5"
-                                    : "border-slate-200 hover:border-slate-300"
-                            }`}
-                        >
-                            {LAYOUT_PREVIEWS[value]}
-                            <p className="text-sm font-bold text-slate-900">{LAYOUT_LABELS[value]}</p>
-                            <p className="text-xs text-slate-500">{LAYOUT_DESCS[value]}</p>
-                            {menuLayout === value && (
-                                <span className="absolute top-2 right-2 material-symbols-outlined text-primary text-base">check_circle</span>
-                            )}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Accent Color */}
-            <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                    <span className="material-symbols-outlined text-primary">palette</span>
-                    <h2 className="text-lg font-bold text-slate-900">{t("settings.accentColorTitle")}</h2>
-                </div>
-                <p className="text-sm text-slate-500 mb-4">{t("settings.accentColorDesc")}</p>
-                <div className="flex gap-3 flex-wrap">
-                    {ACCENT_COLORS.map(({ value, label }) => (
-                        <button
-                            key={value}
-                            type="button"
-                            title={label}
-                            onClick={() => setAccentColor(value)}
-                            className={`w-9 h-9 rounded-full transition-all ${
-                                accentColor === value
-                                    ? "ring-2 ring-offset-2 ring-slate-400 scale-110"
-                                    : "hover:scale-105"
-                            }`}
-                            style={{ backgroundColor: value }}
-                        />
-                    ))}
-                </div>
-            </div>
-
-            {/* Show Prices & Currency */}
-            <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm space-y-5">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-primary">payments</span>
-                        <div>
-                            <p className="font-bold text-slate-900">{t("settings.showPricesTitle")}</p>
-                            <p className="text-sm text-slate-500">{t("settings.showPricesDesc")}</p>
+                    {/* Restaurant Info */}
+                    <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm">
+                        <div className="flex items-center gap-2 mb-5">
+                            <span className="material-symbols-outlined text-primary">storefront</span>
+                            <h2 className="text-lg font-bold text-slate-900">{t("settings.restaurantInfoTitle")}</h2>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <label htmlFor="restaurant-name" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                                    {t("settings.restaurantName")}
+                                </label>
+                                <div className="relative">
+                                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">storefront</span>
+                                    <input
+                                        id="restaurant-name"
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="w-full pl-10 pr-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label htmlFor="restaurant-phone" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                                    {t("settings.phone")}
+                                </label>
+                                <div className="relative">
+                                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">phone</span>
+                                    <input
+                                        id="restaurant-phone"
+                                        type="tel"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        placeholder={t("settings.phonePlaceholder")}
+                                        className="w-full pl-10 pr-4 h-12 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <button
-                        type="button"
-                        onClick={() => setShowPrices((p) => !p)}
-                        className={`relative w-12 h-6 rounded-full transition-colors ${showPrices ? "bg-primary" : "bg-slate-200"}`}
-                    >
-                        <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${showPrices ? "translate-x-6" : ""}`} />
-                    </button>
-                </div>
-                <div className="border-t border-slate-100 pt-5">
-                    <div className="flex items-center gap-2 mb-3">
-                        <span className="material-symbols-outlined text-primary">currency_exchange</span>
-                        <div>
-                            <p className="font-bold text-slate-900">{t("settings.currencyTitle")}</p>
-                            <p className="text-sm text-slate-500">{t("settings.currencyDesc")}</p>
+
+                    {/* Layout Selection */}
+                    <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm">
+                        <div className="flex items-center gap-2 mb-5">
+                            <span className="material-symbols-outlined text-primary">dashboard</span>
+                            <h2 className="text-lg font-bold text-slate-900">{t("settings.menuLayoutTitle")}</h2>
+                        </div>
+                        <p className="text-sm text-slate-500 mb-4">{t("settings.menuLayoutDesc")}</p>
+                        <div className="grid grid-cols-3 gap-3">
+                            {LAYOUT_VALUES.map((value) => (
+                                <button
+                                    key={value}
+                                    type="button"
+                                    onClick={() => setMenuLayout(value)}
+                                    className={`relative p-3 rounded-xl border-2 text-left transition-all ${menuLayout === value
+                                            ? "border-primary bg-primary/5"
+                                            : "border-slate-200 hover:border-slate-300"
+                                        }`}
+                                >
+                                    {LAYOUT_PREVIEWS[value]}
+                                    <p className="text-sm font-bold text-slate-900">{LAYOUT_LABELS[value]}</p>
+                                    <p className="text-xs text-slate-500">{LAYOUT_DESCS[value]}</p>
+                                    {menuLayout === value && (
+                                        <span className="absolute top-2 right-2 material-symbols-outlined text-primary text-base">check_circle</span>
+                                    )}
+                                </button>
+                            ))}
                         </div>
                     </div>
-                    <div className="flex gap-2 flex-wrap">
-                        {CURRENCIES.map((c) => (
+
+                    {/* Accent Color */}
+                    <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm">
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="material-symbols-outlined text-primary">palette</span>
+                            <h2 className="text-lg font-bold text-slate-900">{t("settings.accentColorTitle")}</h2>
+                        </div>
+                        <p className="text-sm text-slate-500 mb-4">{t("settings.accentColorDesc")}</p>
+                        <div className="flex gap-3 flex-wrap">
+                            {ACCENT_COLORS.map(({ value, label }) => (
+                                <button
+                                    key={value}
+                                    type="button"
+                                    title={label}
+                                    onClick={() => setAccentColor(value)}
+                                    className={`w-9 h-9 rounded-full transition-all ${accentColor === value
+                                            ? "ring-2 ring-offset-2 ring-slate-400 scale-110"
+                                            : "hover:scale-105"
+                                        }`}
+                                    style={{ backgroundColor: value }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Show Prices & Currency */}
+                    <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm space-y-5">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-primary">payments</span>
+                                <div>
+                                    <p className="font-bold text-slate-900">{t("settings.showPricesTitle")}</p>
+                                    <p className="text-sm text-slate-500">{t("settings.showPricesDesc")}</p>
+                                </div>
+                            </div>
                             <button
-                                key={c}
                                 type="button"
-                                onClick={() => setCurrency(c)}
-                                className={`w-12 h-10 rounded-xl text-sm font-bold border-2 transition-all ${
-                                    currency === c
-                                        ? "border-primary bg-primary/5 text-primary"
-                                        : "border-slate-200 text-slate-600 hover:border-slate-300"
-                                }`}
+                                onClick={() => setShowPrices((p) => !p)}
+                                className={`relative w-12 h-6 rounded-full transition-colors ${showPrices ? "bg-primary" : "bg-slate-200"}`}
                             >
-                                {c}
+                                <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${showPrices ? "translate-x-6" : ""}`} />
                             </button>
-                        ))}
+                        </div>
+                        <div className="border-t border-slate-100 pt-5">
+                            <div className="flex items-center gap-2 mb-3">
+                                <span className="material-symbols-outlined text-primary">currency_exchange</span>
+                                <div>
+                                    <p className="font-bold text-slate-900">{t("settings.currencyTitle")}</p>
+                                    <p className="text-sm text-slate-500">{t("settings.currencyDesc")}</p>
+                                </div>
+                            </div>
+                            <div className="flex gap-2 flex-wrap">
+                                {CURRENCIES.map((c) => (
+                                    <button
+                                        key={c}
+                                        type="button"
+                                        onClick={() => setCurrency(c)}
+                                        className={`w-12 h-10 rounded-xl text-sm font-bold border-2 transition-all ${currency === c
+                                                ? "border-primary bg-primary/5 text-primary"
+                                                : "border-slate-200 text-slate-600 hover:border-slate-300"
+                                            }`}
+                                    >
+                                        {c}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {status && (
+                        <div className={`flex items-center gap-2 text-sm p-3 rounded-lg ${status === "error" ? "text-red-600 bg-red-50" : "text-green-600 bg-green-50"
+                            }`}>
+                            <span className="material-symbols-outlined text-lg">
+                                {status === "error" ? "error" : "check_circle"}
+                            </span>
+                            {t(`settings.${status}`)}
+                        </div>
+                    )}
+
+                    <div className="flex items-center justify-between">
+                        <p className="text-xs text-slate-400 flex items-center gap-1">
+                            <span className="material-symbols-outlined text-sm">info</span>
+                            {" "}{t("settings.saveNote")}
+                        </p>
+                        <button
+                            onClick={handleSave}
+                            disabled={saving}
+                            className="flex items-center gap-2 px-6 h-12 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-bold disabled:opacity-50 shadow-sm shadow-primary/20"
+                        >
+                            <span className="material-symbols-outlined text-lg">save</span>
+                            {saving ? t("settings.saving") : t("settings.save")}
+                        </button>
                     </div>
                 </div>
-            </div>
 
-            {status && (
-                <div className={`flex items-center gap-2 text-sm p-3 rounded-lg ${
-                    status === "error" ? "text-red-600 bg-red-50" : "text-green-600 bg-green-50"
-                }`}>
-                    <span className="material-symbols-outlined text-lg">
-                        {status === "error" ? "error" : "check_circle"}
-                    </span>
-                    {t(`settings.${status}`)}
+                {/* Preview column */}
+                <div className="hidden lg:block sticky top-8 shrink-0">
+                    <MenuPreview
+                        restaurantName={name}
+                        layout={menuLayout}
+                        accentColor={accentColor}
+                        showPrices={showPrices}
+                        currency={currency}
+                    />
                 </div>
-            )}
-
-            <div className="flex items-center justify-between">
-                <p className="text-xs text-slate-400 flex items-center gap-1">
-                    <span className="material-symbols-outlined text-sm">info</span>
-                    {" "}{t("settings.saveNote")}
-                </p>
-                <button
-                    onClick={handleSave}
-                    disabled={saving}
-                    className="flex items-center gap-2 px-6 h-12 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-bold disabled:opacity-50 shadow-sm shadow-primary/20"
-                >
-                    <span className="material-symbols-outlined text-lg">save</span>
-                    {saving ? t("settings.saving") : t("settings.save")}
-                </button>
             </div>
         </div>
     );

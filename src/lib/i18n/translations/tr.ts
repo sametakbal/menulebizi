@@ -115,6 +115,7 @@ export const tr = {
         showPricesDesc: "Menüde ürün fiyatlarını görünür yapın.",
         currencyTitle: "Para Birimi",
         currencyDesc: "Fiyatların yanında görünecek sembol.",
+        previewTitle: "Canlı Önizleme",
         saveNote: "Kaydettikten sonra menünüze anında yansır.",
         save: "Kaydet",
         saving: "Kaydediliyor...",
@@ -124,5 +125,8 @@ export const tr = {
     publicMenu: {
         notReady: "Menü henüz hazırlanmamış.",
         poweredBy: "ile oluşturuldu",
+        demoBadge: "Demo Menü",
+        demoDesc: "Bu menü tanıtım amaçlıdır. Kendi menünüzü oluşturmak için kaydolun.",
+        demoSignup: "Ücretsiz Başla",
     },
 } as const;

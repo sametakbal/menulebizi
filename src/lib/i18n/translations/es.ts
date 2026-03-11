@@ -115,6 +115,7 @@ export const es = {
         showPricesDesc: "Muestra los precios de los productos en tu menú.",
         currencyTitle: "Moneda",
         currencyDesc: "Símbolo que aparece junto a los precios.",
+        previewTitle: "Vista previa",
         saveNote: "Los cambios se reflejarán en tu menú inmediatamente después de guardar.",
         save: "Guardar",
         saving: "Guardando...",
@@ -124,5 +125,8 @@ export const es = {
     publicMenu: {
         notReady: "El menú aún no está listo.",
         poweredBy: "powered by",
+        demoBadge: "Menú Demo",
+        demoDesc: "Este menú es de demostración. Regístrate para crear el tuyo.",
+        demoSignup: "Empezar gratis",
     },
 } as const;
