@@ -6,18 +6,32 @@ import { useAuth } from "@/components/AuthProvider";
 import { useLanguage } from "@/contexts/LanguageContext";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import type { TranslationKey } from "@/lib/i18n";
+import { useState, useEffect } from "react";
 
-const navItems: { href: string; labelKey: TranslationKey; icon: string }[] = [
+const BASE_NAV_ITEMS: { href: string; labelKey: TranslationKey; icon: string }[] = [
     { href: "/dashboard", labelKey: "nav.overview", icon: "dashboard" },
     { href: "/dashboard/menu", labelKey: "nav.menuManagement", icon: "restaurant_menu" },
-    { href: "/dashboard/orders", labelKey: "nav.orders", icon: "receipt_long" },
     { href: "/dashboard/settings", labelKey: "nav.settings", icon: "settings" },
 ];
+
+const ORDERS_NAV_ITEM = { href: "/dashboard/orders", labelKey: "nav.orders" as TranslationKey, icon: "receipt_long" };
 
 export default function DashboardNav() {
     const pathname = usePathname();
     const { logout } = useAuth();
     const { t } = useLanguage();
+    const [ordersEnabled, setOrdersEnabled] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        fetch("/api/restaurant")
+            .then((res) => res.json())
+            .then((data) => setOrdersEnabled(data.ordersEnabled === true))
+            .catch(() => setOrdersEnabled(false));
+    }, []);
+
+    const navItems = ordersEnabled
+        ? [BASE_NAV_ITEMS[0], BASE_NAV_ITEMS[1], ORDERS_NAV_ITEM, BASE_NAV_ITEMS[2]]
+        : BASE_NAV_ITEMS;
 
     return (
         <nav className="bg-white border-b border-slate-100">

@@ -13,10 +13,13 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    // Validate restaurant exists
+    // Validate restaurant exists and orders are enabled
     const restaurantDoc = await adminDb.collection("restaurants").doc(restaurantId).get();
     if (!restaurantDoc.exists) {
         return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
+    }
+    if (!restaurantDoc.data()?.ordersEnabled) {
+        return NextResponse.json({ error: "Orders not enabled" }, { status: 403 });
     }
 
     // Validate items exist and belong to this restaurant

@@ -76,6 +76,7 @@ export default async function PublicMenuPage({
     const accentColor = (restaurant.accentColor as string) || "#e9590c";
     const showPrices = restaurant.showPrices !== false;
     const currency = (restaurant.currency as string) || "₺";
+    const ordersEnabled = restaurant.ordersEnabled === true;
 
     // Table mode: render interactive menu with cart + waiter call
     if (tableNumber) {
@@ -109,6 +110,7 @@ export default async function PublicMenuPage({
                 showPrices={showPrices}
                 currency={currency}
                 tableNumber={tableNumber}
+                ordersEnabled={ordersEnabled}
                 t={tableT}
             />
         );

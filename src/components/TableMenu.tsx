@@ -38,6 +38,7 @@ interface TableMenuProps {
     readonly showPrices: boolean;
     readonly currency: string;
     readonly tableNumber: string;
+    readonly ordersEnabled: boolean;
     readonly t: Record<string, string>;
 }
 
@@ -58,6 +59,7 @@ export default function TableMenu({
     showPrices,
     currency,
     tableNumber,
+    ordersEnabled,
     t,
 }: TableMenuProps) {
     const [cart, setCart] = useState<CartItem[]>([]);
@@ -189,6 +191,7 @@ export default function TableMenu({
                             showPrices={showPrices}
                             currency={currency}
                             cart={cart}
+                            ordersEnabled={ordersEnabled}
                             onAdd={addToCart}
                             onUpdateQuantity={updateQuantity}
                             t={t}
@@ -244,23 +247,25 @@ export default function TableMenu({
                     </button>
 
                     {/* Cart button */}
-                    <button
-                        onClick={() => setCartOpen(true)}
-                        disabled={cartCount === 0}
-                        className="flex-1 flex items-center justify-between gap-2 px-5 py-3 rounded-xl bg-primary text-white font-bold text-sm disabled:opacity-40 transition-colors hover:bg-primary/90 shadow-sm"
-                        style={{ backgroundColor: cartCount > 0 ? accentColor : undefined }}
-                    >
-                        <span className="flex items-center gap-2">
-                            <span className="material-symbols-outlined text-lg">shopping_cart</span>
-                            {t.viewCart}
-                            {cartCount > 0 && (
-                                <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">{cartCount}</span>
+                    {ordersEnabled && (
+                        <button
+                            onClick={() => setCartOpen(true)}
+                            disabled={cartCount === 0}
+                            className="flex-1 flex items-center justify-between gap-2 px-5 py-3 rounded-xl bg-primary text-white font-bold text-sm disabled:opacity-40 transition-colors hover:bg-primary/90 shadow-sm"
+                            style={{ backgroundColor: cartCount > 0 ? accentColor : undefined }}
+                        >
+                            <span className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-lg">shopping_cart</span>
+                                {t.viewCart}
+                                {cartCount > 0 && (
+                                    <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">{cartCount}</span>
+                                )}
+                            </span>
+                            {cartCount > 0 && showPrices && (
+                                <span>{cartTotal.toFixed(2)} {currency}</span>
                             )}
-                        </span>
-                        {cartCount > 0 && showPrices && (
-                            <span>{cartTotal.toFixed(2)} {currency}</span>
-                        )}
-                    </button>
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -365,6 +370,7 @@ function TableCategorySection({
     showPrices,
     currency,
     cart,
+    ordersEnabled,
     onAdd,
     onUpdateQuantity,
     t,
@@ -374,6 +380,7 @@ function TableCategorySection({
     readonly showPrices: boolean;
     readonly currency: string;
     readonly cart: CartItem[];
+    readonly ordersEnabled: boolean;
     readonly onAdd: (item: { id: string; name: string; price: number }) => void;
     readonly onUpdateQuantity: (id: string, delta: number) => void;
     readonly t: Record<string, string>;
@@ -404,33 +411,35 @@ function TableCategorySection({
                                 currency={currency}
                             />
                             {/* Add/quantity overlay */}
-                            <div className="absolute bottom-1 right-1 z-10">
-                                {inCart ? (
-                                    <div className="flex items-center gap-1 bg-white rounded-lg shadow-md border border-slate-200 p-0.5">
+                            {ordersEnabled && (
+                                <div className="absolute bottom-1 right-1 z-10">
+                                    {inCart ? (
+                                        <div className="flex items-center gap-1 bg-white rounded-lg shadow-md border border-slate-200 p-0.5">
+                                            <button
+                                                onClick={() => onUpdateQuantity(item.id, -1)}
+                                                className="w-7 h-7 rounded-md flex items-center justify-center text-slate-600 hover:bg-slate-100"
+                                            >
+                                                <span className="material-symbols-outlined text-sm">remove</span>
+                                            </button>
+                                            <span className="w-5 text-center font-bold text-xs">{inCart.quantity}</span>
+                                            <button
+                                                onClick={() => onUpdateQuantity(item.id, 1)}
+                                                className="w-7 h-7 rounded-md flex items-center justify-center text-slate-600 hover:bg-slate-100"
+                                            >
+                                                <span className="material-symbols-outlined text-sm">add</span>
+                                            </button>
+                                        </div>
+                                    ) : (
                                         <button
-                                            onClick={() => onUpdateQuantity(item.id, -1)}
-                                            className="w-7 h-7 rounded-md flex items-center justify-center text-slate-600 hover:bg-slate-100"
+                                            onClick={() => onAdd({ id: item.id, name: item.name, price: item.price })}
+                                            className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shadow-md hover:bg-primary/90 transition-colors"
+                                            title={t.add}
                                         >
-                                            <span className="material-symbols-outlined text-sm">remove</span>
+                                            <span className="material-symbols-outlined text-lg">add</span>
                                         </button>
-                                        <span className="w-5 text-center font-bold text-xs">{inCart.quantity}</span>
-                                        <button
-                                            onClick={() => onUpdateQuantity(item.id, 1)}
-                                            className="w-7 h-7 rounded-md flex items-center justify-center text-slate-600 hover:bg-slate-100"
-                                        >
-                                            <span className="material-symbols-outlined text-sm">add</span>
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <button
-                                        onClick={() => onAdd({ id: item.id, name: item.name, price: item.price })}
-                                        className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shadow-md hover:bg-primary/90 transition-colors"
-                                        title={t.add}
-                                    >
-                                        <span className="material-symbols-outlined text-lg">add</span>
-                                    </button>
-                                )}
-                            </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     );
                 })}

@@ -65,6 +65,7 @@ export default function SettingsPage() {
     const [accentColor, setAccentColor] = useState("#e9590c");
     const [showPrices, setShowPrices] = useState(true);
     const [currency, setCurrency] = useState("₺");
+    const [ordersEnabled, setOrdersEnabled] = useState(false);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [status, setStatus] = useState<"" | "saved" | "error">("");
@@ -91,6 +92,7 @@ export default function SettingsPage() {
                 setAccentColor(data.accentColor || "#e9590c");
                 setShowPrices(data.showPrices !== false);
                 setCurrency(data.currency || "₺");
+                setOrdersEnabled(data.ordersEnabled === true);
             })
             .finally(() => setLoading(false));
     }, []);
@@ -102,7 +104,7 @@ export default function SettingsPage() {
             const res = await fetch("/api/restaurant", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, phone, menuLayout, accentColor, showPrices, currency }),
+                body: JSON.stringify({ name, phone, menuLayout, accentColor, showPrices, currency, ordersEnabled }),
             });
             setStatus(res.ok ? "saved" : "error");
         } finally {
@@ -220,6 +222,26 @@ export default function SettingsPage() {
                                     style={{ backgroundColor: value }}
                                 />
                             ))}
+                        </div>
+                    </div>
+
+                    {/* Orders */}
+                    <div className="bg-white rounded-xl border border-slate-100 p-6 shadow-sm">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-primary">receipt_long</span>
+                                <div>
+                                    <p className="font-bold text-slate-900">{t("settings.ordersTitle")}</p>
+                                    <p className="text-sm text-slate-500">{t("settings.ordersDesc")}</p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setOrdersEnabled((p) => !p)}
+                                className={`relative w-12 h-6 rounded-full transition-colors ${ordersEnabled ? "bg-primary" : "bg-slate-200"}`}
+                            >
+                                <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${ordersEnabled ? "translate-x-6" : ""}`} />
+                            </button>
                         </div>
                     </div>
 

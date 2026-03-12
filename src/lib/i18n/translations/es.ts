@@ -116,6 +116,8 @@ export const es = {
         showPricesDesc: "Muestra los precios de los productos en tu menú.",
         currencyTitle: "Moneda",
         currencyDesc: "Símbolo que aparece junto a los precios.",
+        ordersTitle: "Toma de pedidos",
+        ordersDesc: "Permite a los clientes hacer pedidos desde su mesa.",
         previewTitle: "Vista previa",
         saveNote: "Los cambios se reflejarán en tu menú inmediatamente después de guardar.",
         save: "Guardar",
@@ -155,6 +157,9 @@ export const es = {
         activeOrders: "Pedidos activos",
         allOrders: "Todos los pedidos",
         noOrders: "Todavía no hay pedidos.",
+        disabled: "Toma de pedidos desactivada",
+        disabledDesc: "Activa la toma de pedidos en la configuración para que los clientes puedan hacer pedidos.",
+        goToSettings: "Ir a configuración",
         cancel: "Cancelar",
         status: {
             pending: "Pendiente",

@@ -116,6 +116,8 @@ export const tr = {
         showPricesDesc: "Menüde ürün fiyatlarını görünür yapın.",
         currencyTitle: "Para Birimi",
         currencyDesc: "Fiyatların yanında görünecek sembol.",
+        ordersTitle: "Sipariş Alma",
+        ordersDesc: "Müşterilerinizin masa üzerinden sipariş vermesine izin verin.",
         previewTitle: "Canlı Önizleme",
         saveNote: "Kaydettikten sonra menünüze anında yansır.",
         save: "Kaydet",
@@ -155,6 +157,9 @@ export const tr = {
         activeOrders: "Aktif Siparişler",
         allOrders: "Tüm Siparişler",
         noOrders: "Henüz sipariş yok.",
+        disabled: "Sipariş alma devre dışı",
+        disabledDesc: "Müşterilerinizin sipariş verebilmesi için ayarlardan sipariş almayı etkinleştirin.",
+        goToSettings: "Ayarlara Git",
         cancel: "İptal",
         status: {
             pending: "Bekliyor",

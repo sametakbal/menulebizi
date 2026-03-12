@@ -60,15 +60,21 @@ export default function OrdersPage() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [waiterCalls, setWaiterCalls] = useState<WaiterCall[]>([]);
     const [loading, setLoading] = useState(true);
+    const [ordersEnabled, setOrdersEnabled] = useState(true);
     const [filter, setFilter] = useState<"active" | "all">("active");
 
     const fetchData = useCallback(async () => {
-        const [ordersRes, callsRes] = await Promise.all([
+        const [ordersRes, callsRes, restaurantRes] = await Promise.all([
             fetch("/api/orders"),
             fetch("/api/waiter-call"),
+            fetch("/api/restaurant"),
         ]);
         if (ordersRes.ok) setOrders(await ordersRes.json());
         if (callsRes.ok) setWaiterCalls(await callsRes.json());
+        if (restaurantRes.ok) {
+            const data = await restaurantRes.json();
+            setOrdersEnabled(data.ordersEnabled === true);
+        }
         setLoading(false);
     }, []);
 
@@ -113,6 +119,31 @@ export default function OrdersPage() {
         return (
             <div className="flex items-center justify-center py-20">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+            </div>
+        );
+    }
+
+    if (!ordersEnabled) {
+        return (
+            <div className="space-y-8">
+                <div>
+                    <h1 className="text-2xl font-black text-slate-900">{t("orders.title")}</h1>
+                    <p className="text-slate-500 mt-1">{t("orders.subtitle")}</p>
+                </div>
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                        <span className="material-symbols-outlined text-slate-400 text-3xl">receipt_long</span>
+                    </div>
+                    <h2 className="text-lg font-bold text-slate-700 mb-2">{t("orders.disabled")}</h2>
+                    <p className="text-slate-500 text-sm max-w-sm mb-6">{t("orders.disabledDesc")}</p>
+                    <a
+                        href="/dashboard/settings"
+                        className="flex items-center gap-2 px-5 h-11 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary/90 transition-colors"
+                    >
+                        <span className="material-symbols-outlined text-lg">settings</span>
+                        {t("orders.goToSettings")}
+                    </a>
+                </div>
             </div>
         );
     }

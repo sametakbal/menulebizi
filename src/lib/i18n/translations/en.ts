@@ -116,6 +116,8 @@ export const en = {
         showPricesDesc: "Display item prices on your menu.",
         currencyTitle: "Currency",
         currencyDesc: "Symbol shown next to prices.",
+        ordersTitle: "Order Taking",
+        ordersDesc: "Allow customers to place orders from their table.",
         previewTitle: "Live Preview",
         saveNote: "Changes will reflect on your menu immediately after saving.",
         save: "Save",
@@ -155,6 +157,9 @@ export const en = {
         activeOrders: "Active Orders",
         allOrders: "All Orders",
         noOrders: "No orders yet.",
+        disabled: "Order taking is disabled",
+        disabledDesc: "Enable order taking in settings to allow customers to place orders.",
+        goToSettings: "Go to Settings",
         cancel: "Cancel",
         status: {
             pending: "Pending",
