@@ -6,6 +6,8 @@ import type { MenuLayout } from "@/components/MenuCard";
 import { getLocale } from "@/lib/i18n/getLocale";
 import { getT } from "@/lib/i18n";
 
+type ItemTranslation = { name?: string; description?: string };
+
 interface Item {
     id: string;
     name: string;
@@ -14,6 +16,7 @@ interface Item {
     isAvailable: boolean;
     order: number;
     categoryId: string;
+    translations?: Record<string, ItemTranslation>;
 }
 
 interface Category {
@@ -21,6 +24,22 @@ interface Category {
     name: string;
     order: number;
     items: Item[];
+    translations?: Record<string, { name?: string }>;
+}
+
+function applyItemLocale(item: Item, locale: string): Item {
+    const t = item.translations?.[locale];
+    if (!t) return item;
+    return { ...item, name: t.name || item.name, description: t.description ?? item.description };
+}
+
+function applyCategoryLocale(cat: Category, locale: string): Category {
+    const t = cat.translations?.[locale];
+    return {
+        ...cat,
+        name: t?.name || cat.name,
+        items: cat.items.map((item) => applyItemLocale(item, locale)),
+    };
 }
 
 export default async function PublicMenuPage({
@@ -71,7 +90,8 @@ export default async function PublicMenuPage({
             ...(doc.data() as Omit<Category, "id" | "items">),
             items: allItems.filter((item) => item.categoryId === doc.id),
         }))
-        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+        .map((cat) => applyCategoryLocale(cat, locale));
 
     const accentColor = (restaurant.accentColor as string) || "#e9590c";
     const showPrices = restaurant.showPrices !== false;

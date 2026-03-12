@@ -94,6 +94,11 @@ export const es = {
         changeImage: "Cambiar imagen",
         cancel: "Cancelar",
         update: "Actualizar",
+        langTR: "Turco",
+        langEN: "Inglés",
+        langES: "Español",
+        editCategoryTitle: "Editar nombre de categoría",
+        categoryName: "Nombre de categoría",
     },
     settings: {
         title: "Configuración",

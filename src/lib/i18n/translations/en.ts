@@ -94,6 +94,11 @@ export const en = {
         changeImage: "Change image",
         cancel: "Cancel",
         update: "Update",
+        langTR: "Turkish",
+        langEN: "English",
+        langES: "Spanish",
+        editCategoryTitle: "Edit Category Name",
+        categoryName: "Category Name",
     },
     settings: {
         title: "Settings",

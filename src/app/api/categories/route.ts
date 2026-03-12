@@ -58,6 +58,28 @@ export async function POST(req: NextRequest) {
     }
 }
 
+export async function PATCH(req: NextRequest) {
+    const session = await getSession();
+    if (!session?.restaurantId) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { id, name, translations } = await req.json();
+    if (!id) return NextResponse.json({ error: "ID gerekli" }, { status: 400 });
+
+    const catDoc = await adminDb.collection("categories").doc(id).get();
+    if (!catDoc.exists || catDoc.data()?.restaurantId !== session.restaurantId) {
+        return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    const updates: Record<string, unknown> = {};
+    if (name !== undefined) updates.name = name;
+    if (translations !== undefined) updates.translations = translations;
+
+    await adminDb.collection("categories").doc(id).update(updates);
+    return NextResponse.json({ id, ...updates });
+}
+
 export async function DELETE(req: NextRequest) {
     const session = await getSession();
     if (!session?.restaurantId) {

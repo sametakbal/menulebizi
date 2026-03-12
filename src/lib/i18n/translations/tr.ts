@@ -94,6 +94,11 @@ export const tr = {
         changeImage: "Resmi değiştir",
         cancel: "İptal",
         update: "Güncelle",
+        langTR: "Türkçe",
+        langEN: "İngilizce",
+        langES: "İspanyolca",
+        editCategoryTitle: "Kategori Adını Düzenle",
+        categoryName: "Kategori Adı",
     },
     settings: {
         title: "Ayarlar",
