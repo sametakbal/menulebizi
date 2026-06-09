@@ -402,8 +402,7 @@ export default function SettingsPage() {
                         >
                             <span className="material-symbols-outlined text-lg">save</span>
                             {(() => {
-                                if (uploadingLogo) return t("menu.uploading");
-                                if (saving) return t("settings.saving");
+                                if (uploadingLogo || saving) return t("settings.saving");
                                 return t("settings.save");
                             })()}
                         </button>
