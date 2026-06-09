@@ -28,7 +28,7 @@ export async function PATCH(req: Request) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { name, phone, menuLayout, accentColor, showPrices, currency, ordersEnabled } = await req.json();
+    const { name, phone, menuLayout, accentColor, showPrices, currency, ordersEnabled, logoUrl } = await req.json();
     const updates: Record<string, unknown> = {};
     if (name !== undefined) updates.name = name;
     if (phone !== undefined) updates.phone = phone;
@@ -37,6 +37,7 @@ export async function PATCH(req: Request) {
     if (showPrices !== undefined) updates.showPrices = showPrices;
     if (currency !== undefined) updates.currency = currency;
     if (ordersEnabled !== undefined) updates.ordersEnabled = ordersEnabled;
+    if (logoUrl !== undefined) updates.logoUrl = logoUrl;
 
     await adminDb
         .collection("restaurants")

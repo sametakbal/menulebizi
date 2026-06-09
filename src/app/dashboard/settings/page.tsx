@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import type { MenuLayout } from "@/components/MenuCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import MenuPreview from "@/components/MenuPreview";
+import { storage } from "@/lib/firebase";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 const LAYOUT_PREVIEWS: Record<MenuLayout, React.ReactNode> = {
     classic: (
@@ -59,6 +62,7 @@ const CURRENCIES = ["₺", "$", "€", "£", "₽", "﷼"];
 
 export default function SettingsPage() {
     const { t } = useLanguage();
+    const [restaurantId, setRestaurantId] = useState("");
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [menuLayout, setMenuLayout] = useState<MenuLayout>("classic");
@@ -66,6 +70,11 @@ export default function SettingsPage() {
     const [showPrices, setShowPrices] = useState(true);
     const [currency, setCurrency] = useState("₺");
     const [ordersEnabled, setOrdersEnabled] = useState(false);
+    const [logoUrl, setLogoUrl] = useState("");
+    const [logoFile, setLogoFile] = useState<File | null>(null);
+    const [logoPreview, setLogoPreview] = useState<string | null>(null);
+    const [uploadingLogo, setUploadingLogo] = useState(false);
+    const logoInputRef = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [status, setStatus] = useState<"" | "saved" | "error">("");
@@ -86,6 +95,7 @@ export default function SettingsPage() {
         fetch("/api/restaurant")
             .then((res) => res.json())
             .then((data) => {
+                setRestaurantId(data.id || "");
                 setName(data.name || "");
                 setPhone(data.phone || "");
                 setMenuLayout(data.menuLayout || "classic");
@@ -93,22 +103,56 @@ export default function SettingsPage() {
                 setShowPrices(data.showPrices !== false);
                 setCurrency(data.currency || "₺");
                 setOrdersEnabled(data.ordersEnabled === true);
+                setLogoUrl(data.logoUrl || "");
             })
             .finally(() => setLoading(false));
     }, []);
 
+    const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setLogoFile(file);
+        const reader = new FileReader();
+        reader.onload = () => setLogoPreview(reader.result as string);
+        reader.readAsDataURL(file);
+    };
+
+    const handleLogoRemove = () => {
+        setLogoFile(null);
+        setLogoPreview(null);
+        setLogoUrl("");
+        if (logoInputRef.current) logoInputRef.current.value = "";
+    };
+
     const handleSave = async () => {
         setSaving(true);
+        setUploadingLogo(false);
         setStatus("");
         try {
+            let finalLogoUrl = logoUrl;
+            if (logoFile && restaurantId) {
+                setUploadingLogo(true);
+                const ext = logoFile.name.split(".").pop();
+                const storageRef = ref(storage, `logos/${restaurantId}/logo.${ext}`);
+                if (logoUrl) {
+                    try { await deleteObject(ref(storage, logoUrl)); } catch { /* ignore */ }
+                }
+                await uploadBytes(storageRef, logoFile);
+                finalLogoUrl = await getDownloadURL(storageRef);
+                setLogoUrl(finalLogoUrl);
+                setLogoFile(null);
+                setLogoPreview(null);
+                setUploadingLogo(false);
+            }
             const res = await fetch("/api/restaurant", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, phone, menuLayout, accentColor, showPrices, currency, ordersEnabled }),
+                body: JSON.stringify({ name, phone, menuLayout, accentColor, showPrices, currency, ordersEnabled, logoUrl: finalLogoUrl }),
             });
             setStatus(res.ok ? "saved" : "error");
         } finally {
             setSaving(false);
+            setUploadingLogo(false);
         }
     };
 
@@ -138,6 +182,53 @@ export default function SettingsPage() {
                             <h2 className="text-lg font-bold text-slate-900">{t("settings.restaurantInfoTitle")}</h2>
                         </div>
                         <div className="space-y-4">
+                            {/* Logo upload */}
+                            <div>
+                                <p className="block text-sm font-semibold text-slate-700 mb-1.5">{t("settings.logoTitle")}</p>
+                                <p className="text-xs text-slate-500 mb-3">{t("settings.logoDesc")}</p>
+                                <div className="flex items-center gap-4">
+                                    <div className="w-20 h-20 rounded-xl border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden bg-slate-50 shrink-0">
+                                        {(logoPreview || logoUrl) ? (
+                                            <Image
+                                                src={logoPreview || logoUrl}
+                                                alt="logo"
+                                                width={80}
+                                                height={80}
+                                                className="w-full h-full object-contain"
+                                            />
+                                        ) : (
+                                            <span className="material-symbols-outlined text-slate-300 text-3xl">add_photo_alternate</span>
+                                        )}
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => logoInputRef.current?.click()}
+                                            className="flex items-center gap-1.5 px-4 h-9 rounded-lg border border-slate-200 text-sm font-semibold text-slate-700 hover:border-primary hover:text-primary transition-colors"
+                                        >
+                                            <span className="material-symbols-outlined text-base">upload</span>
+                                            {t("settings.logoUpload")}
+                                        </button>
+                                        {(logoPreview || logoUrl) && (
+                                            <button
+                                                type="button"
+                                                onClick={handleLogoRemove}
+                                                className="flex items-center gap-1.5 px-4 h-9 rounded-lg border border-red-100 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors"
+                                            >
+                                                <span className="material-symbols-outlined text-base">delete</span>
+                                                {t("settings.logoRemove")}
+                                            </button>
+                                        )}
+                                    </div>
+                                    <input
+                                        ref={logoInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={handleLogoChange}
+                                    />
+                                </div>
+                            </div>
                             <div>
                                 <label htmlFor="restaurant-name" className="block text-sm font-semibold text-slate-700 mb-1.5">
                                     {t("settings.restaurantName")}
@@ -186,8 +277,8 @@ export default function SettingsPage() {
                                     type="button"
                                     onClick={() => setMenuLayout(value)}
                                     className={`relative p-3 rounded-xl border-2 text-left transition-all ${menuLayout === value
-                                            ? "border-primary bg-primary/5"
-                                            : "border-slate-200 hover:border-slate-300"
+                                        ? "border-primary bg-primary/5"
+                                        : "border-slate-200 hover:border-slate-300"
                                         }`}
                                 >
                                     {LAYOUT_PREVIEWS[value]}
@@ -216,8 +307,8 @@ export default function SettingsPage() {
                                     title={label}
                                     onClick={() => setAccentColor(value)}
                                     className={`w-9 h-9 rounded-full transition-all ${accentColor === value
-                                            ? "ring-2 ring-offset-2 ring-slate-400 scale-110"
-                                            : "hover:scale-105"
+                                        ? "ring-2 ring-offset-2 ring-slate-400 scale-110"
+                                        : "hover:scale-105"
                                         }`}
                                     style={{ backgroundColor: value }}
                                 />
@@ -278,8 +369,8 @@ export default function SettingsPage() {
                                         type="button"
                                         onClick={() => setCurrency(c)}
                                         className={`w-12 h-10 rounded-xl text-sm font-bold border-2 transition-all ${currency === c
-                                                ? "border-primary bg-primary/5 text-primary"
-                                                : "border-slate-200 text-slate-600 hover:border-slate-300"
+                                            ? "border-primary bg-primary/5 text-primary"
+                                            : "border-slate-200 text-slate-600 hover:border-slate-300"
                                             }`}
                                     >
                                         {c}
@@ -306,11 +397,15 @@ export default function SettingsPage() {
                         </p>
                         <button
                             onClick={handleSave}
-                            disabled={saving}
+                            disabled={saving || uploadingLogo}
                             className="flex items-center gap-2 px-6 h-12 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-bold disabled:opacity-50 shadow-sm shadow-primary/20"
                         >
                             <span className="material-symbols-outlined text-lg">save</span>
-                            {saving ? t("settings.saving") : t("settings.save")}
+                            {(() => {
+                                if (uploadingLogo) return t("menu.uploading");
+                                if (saving) return t("settings.saving");
+                                return t("settings.save");
+                            })()}
                         </button>
                     </div>
                 </div>

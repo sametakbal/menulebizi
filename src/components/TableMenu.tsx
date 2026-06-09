@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import Image from "next/image";
 import type { MenuLayout } from "@/components/MenuCard";
 import CategorySection from "@/components/CategorySection";
 
@@ -32,6 +33,7 @@ interface TableMenuProps {
     readonly restaurantId: string;
     readonly restaurantName: string;
     readonly restaurantPhone?: string;
+    readonly logoUrl?: string;
     readonly categories: Category[];
     readonly layout: MenuLayout;
     readonly accentColor: string;
@@ -53,6 +55,7 @@ export default function TableMenu({
     restaurantId,
     restaurantName,
     restaurantPhone,
+    logoUrl,
     categories,
     layout,
     accentColor,
@@ -146,8 +149,14 @@ export default function TableMenu({
             <div className="max-w-lg mx-auto px-4 py-8 pb-32">
                 {/* Header */}
                 <div className="text-center mb-4">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span className="material-symbols-outlined text-primary text-3xl">restaurant</span>
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                        {logoUrl ? (
+                            <Image src={logoUrl} alt={restaurantName} width={64} height={64} className="w-full h-full object-contain" />
+                        ) : (
+                            <div className="w-full h-full bg-primary/10 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-primary text-3xl">restaurant</span>
+                            </div>
+                        )}
                     </div>
                     <h1 className="text-2xl font-black text-slate-900">{restaurantName}</h1>
                     {restaurantPhone && (

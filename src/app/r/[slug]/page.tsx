@@ -1,5 +1,6 @@
 import { adminDb } from "@/lib/firebase-admin";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import CategorySection from "@/components/CategorySection";
 import TableMenu from "@/components/TableMenu";
 import type { MenuLayout } from "@/components/MenuCard";
@@ -97,6 +98,7 @@ export default async function PublicMenuPage({
     const showPrices = restaurant.showPrices !== false;
     const currency = (restaurant.currency as string) || "₺";
     const ordersEnabled = restaurant.ordersEnabled === true;
+    const logoUrl = (restaurant.logoUrl as string) || "";
 
     // Table mode: render interactive menu with cart + waiter call
     if (tableNumber) {
@@ -124,6 +126,7 @@ export default async function PublicMenuPage({
                 restaurantId={restaurantDoc.id}
                 restaurantName={restaurant.name}
                 restaurantPhone={restaurant.phone}
+                logoUrl={logoUrl}
                 categories={categories}
                 layout={(restaurant.menuLayout as MenuLayout) || "classic"}
                 accentColor={accentColor}
@@ -141,8 +144,14 @@ export default async function PublicMenuPage({
             <div className="max-w-lg mx-auto px-4 py-8">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span className="material-symbols-outlined text-primary text-3xl">restaurant</span>
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                        {logoUrl ? (
+                            <Image src={logoUrl} alt={restaurant.name as string} width={64} height={64} className="w-full h-full object-contain" />
+                        ) : (
+                            <div className="w-full h-full bg-primary/10 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-primary text-3xl">restaurant</span>
+                            </div>
+                        )}
                     </div>
                     <h1 className="text-2xl font-black text-slate-900">{restaurant.name}</h1>
                     {restaurant.phone && (
