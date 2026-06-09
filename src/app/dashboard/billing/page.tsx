@@ -47,21 +47,13 @@ export default function BillingPage() {
         if (!billingStatus?.appUserId) return;
         setSubmitting(true);
         try {
-            const { Purchases } = await import("@revenuecat/purchases-js");
-            const purchases = Purchases.configure({
-                apiKey: process.env.NEXT_PUBLIC_REVENUECAT_API_KEY!,
-                appUserId: billingStatus.appUserId,
-            });
-            const offerings = await purchases.getOfferings();
-            const pkg = offerings.current?.availablePackages[0];
-            if (!pkg) {
+            const res = await fetch("/api/billing/checkout", { method: "POST" });
+            const { checkoutUrl } = await res.json();
+            if (checkoutUrl) {
+                window.location.href = checkoutUrl;
+            } else {
                 alert(t("billing.paymentError"));
-                return;
             }
-            await purchases.purchase({ rcPackage: pkg });
-            // Refresh status after successful purchase
-            const res = await fetch("/api/billing/status");
-            setBillingStatus(await res.json());
         } catch (err) {
             console.error(err);
         } finally {

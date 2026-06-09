@@ -10,7 +10,6 @@
     "seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
-    "@revenuecat/purchases-js": "^1.28.0",
     "firebase": "^12.10.0",
     "firebase-admin": "^13.7.0",
     "iyzipay": "^2.0.65",
