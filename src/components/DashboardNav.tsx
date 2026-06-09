@@ -12,6 +12,7 @@ const BASE_NAV_ITEMS: { href: string; labelKey: TranslationKey; icon: string }[]
     { href: "/dashboard", labelKey: "nav.overview", icon: "dashboard" },
     { href: "/dashboard/menu", labelKey: "nav.menuManagement", icon: "restaurant_menu" },
     { href: "/dashboard/settings", labelKey: "nav.settings", icon: "settings" },
+    { href: "/dashboard/billing", labelKey: "billing.navLabel", icon: "credit_card" },
 ];
 
 const ORDERS_NAV_ITEM = { href: "/dashboard/orders", labelKey: "nav.orders" as TranslationKey, icon: "receipt_long" };

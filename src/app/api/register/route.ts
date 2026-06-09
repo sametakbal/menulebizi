@@ -57,12 +57,15 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Create restaurant
+        // Create restaurant with 30-day trial
+        const trialEndsAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
         const restaurantRef = await adminDb.collection("restaurants").add({
             name: restaurantName,
             slug,
             phone: "",
             createdAt: new Date().toISOString(),
+            subscriptionStatus: "trial",
+            trialEndsAt,
         });
 
         // Create user doc linked to Firebase Auth uid
